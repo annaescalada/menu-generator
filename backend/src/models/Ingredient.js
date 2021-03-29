@@ -1,22 +1,76 @@
 const mongoose = require('mongoose')
-const validator =  require('validator')
 
-const Ingredient = mongoose.model('Ingredient', {
+const userSchema = new mongoose.Schema({
     name: {
         type: String,
+        unique: true,
         trim: true,
+        lowercase: true,
         required: true,
     },
-    password: {
-        type: Number,
+    season: [{
+        type: String,
+        enum: ['verano', 'invierno', 'otoño', 'primavera'],
         required: true,
-        trim: true,
-        minLength: 7,
-        validate(value) {
-            if (value.toLowerCase().includes('password')) {
-                throw new Error ('Password cannot contain password.')
-            }
-
+    }],
+    group: {
+        type: String,
+        enum: [
+            'cereales',
+            'legumbres',
+            'frutos secos',
+            'omega 3',
+            'frutas',
+            'frutos rojos',
+            'grasas saludables',
+            'otras verduras',
+            'crucíferas',
+            'hortalizas',
+            'làcteos vegetales',
+            'condimento',
+            'salsa'
+        ]
+    },
+    portion: {
+        XS: Number,
+        S: Number,
+        M: Number,
+        L: Number,
+        XL: Number
+    },
+    units: {
+        type: String,
+        enum: ['tz', 'cs', 'cp', 'u']
+    },
+    duration: Number,
+    ingredients: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'Ingredient',
+        required: function () {
+            return this.isComplex
         }
-    }
+    },
+    preparation: {
+        type: [{
+            step: Number,
+            text: String
+        }],
+        required: function () {
+            return this.isComplex
+        }
+    },
+    utils: {
+        type: [{
+            type: String,
+            enum: ['olla pressión', 'trituradora', 'estuche de vapor', 'sartén']
+        }],
+        required: function () {
+            return this.isComplex
+        }
+    },
+    isComplex: Boolean
 })
+
+const Ingredient = mongoose.model('Ingredient', userSchema)
+
+module.exports = Ingredient
