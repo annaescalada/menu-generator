@@ -2,7 +2,7 @@ const express = require('express')
 const Ingredient = require('../models/ingredient')
 const router = new express.Router()
 const auth = require('../middlewares/auth')
-require('dotenv').config();
+require('dotenv').config()
 
 router.post('/ingredient', auth, async (req, res) => {
     const ingredient = new Ingredient(req.body)
@@ -46,14 +46,11 @@ router.get('/ingredient/:id', auth, async (req, res) => {
     }
 })
 
-//?season=&
 router.get('/ingredients', auth, async (req, res) => {
     try {
-        // const { season, group, } = req.query
-
         const ingredients = await Ingredient.find().populate('ingredients')
 
-        res.send.status(200).send({ ingredients })
+        res.status(200).send({ ingredients })
     } catch(e) {
         res.status(400).send(e)
     }

@@ -9,9 +9,13 @@ import authService from '../services/auth';
 import { unauthorize } from '../services/api';
 
 const useStyles = makeStyles((theme) => ({
+    header: {
+        display:'flex',
+        justifyContent: 'flex-end'
+    },
     link: {
         textDecoration: 'none',
-        color: 'black'
+        color: 'white'
     },
     button: {
         color: 'white',
@@ -34,25 +38,18 @@ const Header = (props) => {
             unauthorize()
             setOpenMenu(false)
         } catch (e) {
-            console.log(e?.response?.data)
+            console.log(e ?.response ?.data)
         }
     }
 
     return <AppBar position="static">
-        <Toolbar>
+        <Toolbar className={classes.header}>
             {isLoggedIn && <>
-                <IconButton onClick={() => setOpenMenu(true)}>
-                    <MenuIcon style={{ color: 'white'}} />
-                </IconButton>
-                <Typography variant="h6">VOWLS (menu generator)</Typography>
-                <Menu
-                    open={openMenu}
-                    onClose={() => setOpenMenu(false)}
-                >
-                    <MenuItem onClick={() => setOpenMenu(false)}><Link className={classes.link} to='/ingredients'>Ingredients</Link></MenuItem>
-                    <MenuItem onClick={() => setOpenMenu(false)}><Link className={classes.link} to='/menus'>Menus</Link></MenuItem>
-                    <Button className={classes.button} color="secondary" variant="contained" onClick={handleLogout}>Log out</Button>
-                </Menu>
+                <MenuItem onClick={() => setOpenMenu(false)}><Link className={classes.link} to='/patients'>Pacientes</Link></MenuItem>
+                <MenuItem onClick={() => setOpenMenu(false)}><Link className={classes.link} to='/ingredients'>Ingredientes</Link></MenuItem>
+                <MenuItem onClick={() => setOpenMenu(false)}><Link className={classes.link} to='/recipes'>Recetas</Link></MenuItem>
+                <MenuItem onClick={() => setOpenMenu(false)}><Link className={classes.link} to='/menus'>Menus</Link></MenuItem>
+                <Button className={classes.button} color="secondary" variant="contained" onClick={handleLogout}>Log out</Button>
             </>}
         </Toolbar>
     </AppBar>

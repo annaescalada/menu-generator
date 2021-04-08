@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react'
-import { Button, Typography } from '@material-ui/core';
+import { Button, Typography, Paper } from '@material-ui/core';
 import authService from '../services/auth';
 import { AuthContext } from '../contexts/auth';
 import { authorize } from '../services/api';
@@ -13,7 +13,8 @@ const useStyles = makeStyles((theme) => {
     container: {
         display: 'flex',
         flexDirection: 'column',
-        padding: '1em'
+        padding: '1em',
+        margin: '3em'
     },
     button: {
         color: 'white',
@@ -46,11 +47,11 @@ const Login = () => {
         }
     }
 
-    return <div className={classes.container}>
+    return <Paper className={classes.container}>
         <TextInput value={email} onChange={(v) => setEmail(v)} required label="email" />
         <TextInput value={password} onChange={(v) => setPassword(v)} type="password" required type='password' label="password" />
         <Button className={classes.button} onClick={handleLogin} onClick={handleLogin} color="secondary" variant="contained">Log in</Button>
-    </div>
+    </Paper>
 }
 
 export default Login

@@ -10,6 +10,9 @@ import PrivateRoute from './components/PrivateRoute'
 import Ingredients from './pages/ingredients/Ingredients'
 import theme from './theme';
 import FeedbackProvider from './contexts/feedback';
+import Recipes from './pages/recipes/Recipes';
+import Menus from './pages/Menus';
+import Patients from './pages/patients/Patients';
 
 ReactDOM.render(
     <BrowserRouter>
@@ -17,7 +20,10 @@ ReactDOM.render(
             <FeedbackProvider>
                 <ThemeProvider theme={theme}>
                     <App>
+                        <PrivateRoute path='/menus' component={Menus} />
+                        <PrivateRoute path='/recipes' component={Recipes} />
                         <PrivateRoute path='/ingredients' component={Ingredients} />
+                        <PrivateRoute path='/patients' component={Patients} />
                         <PublicRoute path='/' component={Login} />
                     </App>
                 </ThemeProvider>

@@ -1,67 +1,95 @@
-// const mongoose = require('mongoose')
+const mongoose = require('mongoose')
+const { mealEnum, utensilsEnum } = require('../bin/enums') 
 
-// const userSchema = new mongoose.Schema({
-//     name: {
-//         type: String,
-//         unique: true,
-//         trim: true,
-//         lowercase: true,
-//         required: true,
-//     },
-//     season: [{
-//         type: String,
-//         enum: ['verano', 'invierno', 'otoño', 'primavera'],
-//         required: true,
-//     }],
-//     group: {
-//         type: String,
-//         enum: [
-//             'cereales', 
-//             'legumbres', 
-//             'frutos secos', 
-//             'omega 3', 
-//             'frutas', 
-//             'frutos rojos', 
-//             'grasas saludables', 
-//             'otras verduras', 
-//             'crucíferas', 
-//             'hortalizas', 
-//             'làcteos vegetales',
-//             'condimento',
-//             'salsa'
-//         ]
-//     },
-//     portion: {
-//         XS: Number,
-//         S:Number,
-//         M: Number,
-//         L: Number,
-//         XL: Number
-//     },
-//     units: {
-//         type: String,
-//         enum: ['tz', 'cs', 'cp', 'u']
-//     },
-//     ingredients: {
-//         type: [mongoose.Schema.Types.ObjectId],
-//         ref: 'Ingredient',
-//         required: function () {
-//             return this.isComplex
-//         }
-//     },
-//     preparation: {
-//         type: [{
-//             step: Number,
-//             text: String
-//         }],
-//         required: function () {
-//             return this.isComplex
-//         }
-//     },
-//     duration: Number,
-//     isComplex: Boolean
-// })
+const recipeSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        unique: true,
+        trim: true,
+        lowercase: true,
+        required: true,
+    },
+    meal: {
+        type: String,
+        enum: mealEnum
+    },
+    carbs: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'Ingredient',
+        required: function () {
+            return this.meal === 'desayuno' || this.meal === 'comida'
+        }
+    },
+    proteins: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'Ingredient',
+        required: function () {
+            return this.meal === 'comida'
+        }
+    },
+    veggies: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'Ingredient',
+        required: function () {
+            return this.meal === 'comida'
+        }
+    },
+    fats: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'Ingredient',
+        required: function () {
+            return this.meal === 'desayuno' || this.meal === 'comida'
+        }
+    },
+    dairy: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'Ingredient',
+        required: function () {
+            return this.meal === 'desayuno'
+        }
+    },
+    omega3: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'Ingredient',
+        required: function () {
+            return this.meal === 'desayuno'
+        }
+    },
+    fruit: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'Ingredient',
+        required: function () {
+            return this.meal === 'desayuno'
+        }
+    },
+    berries: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'Ingredient',
+        required: function () {
+            return this.meal === 'desayuno'
+        }
+    },
+    condiments: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'Ingredient',
+    },
+    duration: {
+        type: Number,
+        required: true
+    },
+    preparation: {
+        type: String,
+        required: true
+    },
+    utensils: {
+        type: [{
+            type: String,
+            enum: utensilsEnum
+        }],
+        required: true
+    },
+})
 
-// const Ingredient = mongoose.model('Ingredient', userSchema)
+const Recipe = mongoose.model('Recipe', recipeSchema)
 
-// module.exports = Ingredient
+module.exports = Recipe

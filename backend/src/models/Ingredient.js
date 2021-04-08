@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
+const { groupEnum, seasonEnum, portionEnum, tagEnum, utensilsEnum } = require('../bin/enums') 
 
-const userSchema = new mongoose.Schema({
+const ingredientSchema = new mongoose.Schema({
     name: {
         type: String,
         unique: true,
@@ -10,39 +11,34 @@ const userSchema = new mongoose.Schema({
     },
     season: [{
         type: String,
-        enum: ['verano', 'invierno', 'otoño', 'primavera'],
+        enum: seasonEnum,
         required: true,
     }],
     group: {
         type: String,
-        enum: [
-            'cereales',
-            'legumbres',
-            'frutos secos',
-            'omega 3',
-            'frutas',
-            'frutos rojos',
-            'grasas saludables',
-            'otras verduras',
-            'crucíferas',
-            'hortalizas',
-            'làcteos vegetales',
-            'condimento',
-            'salsa'
-        ]
+        required: true,
+        enum: groupEnum
     },
     portion: {
-        XS: Number,
-        S: Number,
-        M: Number,
-        L: Number,
-        XL: Number
+        type: Number,
+        required: true
     },
-    units: {
+    unit: {
         type: String,
-        enum: ['tz', 'cs', 'cp', 'u']
+        enum: portionEnum
     },
-    duration: Number,
+    tags: [{
+        type: String,
+        enum: tagEnum
+    }],
+    isComplex: {
+        type: Boolean,
+        default: false
+    },
+    duration: {
+        type: Number,
+        reqwuired: true
+    },
     ingredients: {
         type: [mongoose.Schema.Types.ObjectId],
         ref: 'Ingredient',
@@ -51,26 +47,22 @@ const userSchema = new mongoose.Schema({
         }
     },
     preparation: {
-        type: [{
-            step: Number,
-            text: String
-        }],
+        type: String,
         required: function () {
             return this.isComplex
         }
     },
-    utils: {
+    utensils: {
         type: [{
             type: String,
-            enum: ['olla pressión', 'trituradora', 'estuche de vapor', 'sartén']
+            enum: utensilsEnum
         }],
         required: function () {
             return this.isComplex
         }
     },
-    isComplex: Boolean
 })
 
-const Ingredient = mongoose.model('Ingredient', userSchema)
+const Ingredient = mongoose.model('Ingredient', ingredientSchema)
 
 module.exports = Ingredient

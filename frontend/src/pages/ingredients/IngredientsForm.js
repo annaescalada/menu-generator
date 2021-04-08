@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Typography, makeStyles, Checkbox } from '@material-ui/core'
+import { Button, Typography, makeStyles, Checkbox, Paper } from '@material-ui/core'
 import _ from 'lodash'
 import TextInput from '../../components/shared/TextInput'
 import SelectInput from '../../components/shared/SelectInput'
@@ -9,10 +9,17 @@ const useStyles = makeStyles((theme) => ({
     button: {
         color: 'white',
         margin: '1em'
-    }
+    },
+    container: {
+        display: 'flex',
+        flexDirection: 'column',
+        margin: '2em',
+        padding: '2em'
+
+    },
 }))
 
-const Ingredients = ({ ingredient, setIngredient, error, handleClick, allIngredients }) => {
+const IngredientsForm = ({ ingredient, setIngredient, error, handleClick, allIngredients, enums }) => {
     const classes = useStyles()
 
     const handleIsComplex = () => {
@@ -37,12 +44,12 @@ const Ingredients = ({ ingredient, setIngredient, error, handleClick, allIngredi
         }))
     }
 
-    return <>
+    return <Paper className={classes.container}>
         <TextInput
             label="Name"
             value={ingredient.name}
             onChange={(v) => setIngredient(prev => ({ ...prev, name: v }))}
-            required={true}
+            required
             error={error && !ingredient.name}
         />
         <SelectInput
@@ -50,48 +57,32 @@ const Ingredients = ({ ingredient, setIngredient, error, handleClick, allIngredi
             multiple
             value={ingredient.season || []}
             onChange={(v) => setIngredient(prev => ({ ...prev, season: v }))}
-            required={true}
-            options={['verano', 'invierno', 'otoño', 'primavera']}
+            required
+            options={enums.seasonEnum}
             disabled={ingredient.isComplex}
             error={error && !ingredient.season}
         />
         <SelectInput
             label="Group"
-            value={ingredient.group || []}
+            value={ingredient.group}
             onChange={(v) => setIngredient(prev => ({ ...prev, group: v }))}
-            required={true}
-            options={[
-                'cereales',
-                'legumbres',
-                'frutos secos',
-                'omega 3',
-                'frutas',
-                'frutos rojos',
-                'grasas saludables',
-                'otras verduras',
-                'crucíferas',
-                'hortalizas',
-                'làcteos vegetales',
-                'condimentos',
-                'salsas'
-            ]}
+            required
+            options={enums.groupEnum}
             error={error && !ingredient.group}
         />
-        <div style={{ display: 'flex' }}>
-            {['S', 'M', 'L'].map(key => <TextInput
-                label={key}
-                value={ingredient ?.portion ?.[key]}
-                onChange={(v) => setIngredient(prev => ({ ...prev, portion: v }))}
-                required={true}
-                type='Number'
-            />)}
-        </div>
+        <TextInput
+            label={'Portion'}
+            value={ingredient.portion}
+            onChange={(v) => setIngredient(prev => ({ ...prev, portion: v }))}
+            required
+            type='Number'
+        />
         <SelectInput
             label="Portion Unit"
             value={ingredient.unit}
             onChange={(v) => setIngredient(prev => ({ ...prev, unit: v }))}
-            required={true}
-            options={['tz', 'cs', 'cp', 'u']}
+            required
+            options={enums.portionEnum}
             error={error && !ingredient.unit}
         />
         <SelectInput
@@ -99,8 +90,8 @@ const Ingredients = ({ ingredient, setIngredient, error, handleClick, allIngredi
             multiple
             value={ingredient.tags || []}
             onChange={(v) => setIngredient(prev => ({ ...prev, tags: v }))}
-            required={true}
-            options={['fish', 'meat', 'dairy', 'egg', 'gluten']}
+            required
+            options={enums.tagEnum}
             disabled={ingredient.isComplex}
             error={error && !ingredient.tags}
         />
@@ -117,15 +108,15 @@ const Ingredients = ({ ingredient, setIngredient, error, handleClick, allIngredi
                 label='Duration (min)'
                 value={ingredient.duration}
                 onChange={(v) => setIngredient(prev => ({ ...prev, duration: v }))}
-                required={true}
+                required
                 type='Number'
             />
             <AutocompleteInput
                 label="Ingredients"
                 value={ingredient.ingredients || []}
                 onChange={(v) => handleIngredients(v)}
-                required={true}
-                getOptionLabel={option => `${option ?.portion ?.M}${option.unit} ${option.name}`}
+                required
+                getOptionLabel={option => `${option.portion}${option.unit} ${option.name}`}
                 multiple
                 options={allIngredients}
             />
@@ -133,20 +124,21 @@ const Ingredients = ({ ingredient, setIngredient, error, handleClick, allIngredi
                 label="Preparation"
                 value={ingredient.preparation}
                 onChange={(v) => setIngredient(prev => ({ ...prev, preparation: v }))}
-                required={true}
-                multiline={true}
+                required
+                multiline
             />
             <SelectInput
                 label="Utensils"
                 multiple
                 value={ingredient.utensils}
                 onChange={(v) => setIngredient(prev => ({ ...prev, utensils: v }))}
-                required={true}
-                options={['olla pressión', 'trituradora', 'estuche de vapor', 'sartén']}
+                required
+                options={enums.utensilsEnum}
             />
         </>}
         <Button className={classes.button} onClick={handleClick} color="secondary" variant="contained">Save</Button>
-    </>
+    </Paper >
+
 }
 
-export default Ingredients
+export default IngredientsForm

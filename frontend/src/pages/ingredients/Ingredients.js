@@ -6,21 +6,25 @@ import DeleteIcon from '@material-ui/icons/Delete'
 
 import IngredientsForm from './IngredientsForm'
 import ingredientsService from '../../services/ingredients';
+import sharedService from '../../services/shared';
 import AutocompleteInput from '../../components/shared/AutocompleteInput';
-import Feedback from '../../components/Feedback';
 import { FeedbackContext } from '../../contexts/feedback';
+import Loading from '../../components/shared/Loading';
 
 const useStyles = makeStyles((theme) => ({
+  search: {
+    margin: '2em'
+  },
   container: {
     display: 'flex',
-    flexDirection: 'column',
-    margin: '2em',
-    padding: '2em'
-
+    justifyContent: 'center',
+    marginTop: '2em'
   },
-  button: {
-    color: 'white',
-    margin: '1em'
+  delete: {
+    marginLeft: '1em'
+  },
+  deleteIcon: {
+    color: 'white'
   }
 }))
 
@@ -29,14 +33,18 @@ const Ingredients = () => {
 
   const { message, setMessage } = useContext(FeedbackContext)
 
-  const [allIngredients, setAllIngredients] = useState([])
+  const [enums, setEnums] = useState()
+  const [allIngredients, setAllIngredients] = useState(false)
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [ingredient, setIngredient] = useState({})
 
   const getData = async () => {
     try {
-      const { data } = await ingredientsService.getAllIngredients()
-      setAllIngredients(data.ingredients)
+      const { data: { enums: retrievedEnums } } = await sharedService.getEnums()
+      setEnums(retrievedEnums)
+
+      const { data: { ingredients: retrievedIngredients} } = await ingredientsService.getAllIngredients()
+      setAllIngredients(retrievedIngredients)
     } catch (e) {
       console.log(e ?.response ?.data)
     }
@@ -44,7 +52,6 @@ const Ingredients = () => {
 
   useEffect(() => {
     getData()
-
   }, [])
 
   console.log('ingredient==>', ingredient)
@@ -52,10 +59,11 @@ const Ingredients = () => {
   const handleSave = async () => {
     try {
       await ingredientsService.create(ingredient)
-      setMessage('Ingredient created')
-      setIsFormOpen(false)
       setIngredient({})
+      setIsFormOpen(false)
       getData()
+
+      setMessage('Ingredient created')
     } catch (e) {
       setMessage('Error creating ingredient')
     }
@@ -64,10 +72,11 @@ const Ingredients = () => {
   const handleEdit = async () => {
     try {
       await ingredientsService.edit(ingredient._id, ingredient)
-      setMessage('Ingredient updated')
-      setIsFormOpen(false)
       setIngredient({})
+      setIsFormOpen(false)
       getData()
+
+      setMessage('Ingredient updated')
     } catch (e) {
       setMessage('Error editing ingredient')
     }
@@ -76,48 +85,48 @@ const Ingredients = () => {
   const handleDelete = async () => {
     try {
       await ingredientsService.delete(ingredient._id)
-      setMessage('Ingredient deleted')
-      setIsFormOpen(false)
       setIngredient({})
+      setIsFormOpen(false)
       getData()
+
+      setMessage('Ingredient deleted')
     } catch (e) {
       setMessage('Error deleting ingredient')
     }
   }
 
   return allIngredients ? <>
-    <AutocompleteInput
-      onChange={(v) => { setIngredient(v || {}); setIsFormOpen(Boolean(v)) }}
-      required={true}
-      getOptionLabel={option => `${option.name}`}
-      options={allIngredients}
-    />
-    {}
-    <Paper className={classes.container}>
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <Fab color="primary" aria-label="add" onClick={() => {
-          setIngredient({});
-          setIsFormOpen(!isFormOpen);
-        }}>
-          {isFormOpen
-            ? <Close />
-            : <AddIcon />}
-        </Fab>
-        {ingredient._id && <Fab style={{ marginLeft: '1em' }} color="secondary" onClick={handleDelete}>
-          <DeleteIcon style={{ color: 'white', }} />
-        </Fab>}
-      </div>
-      {
-        isFormOpen && <IngredientsForm
-          ingredient={ingredient}
-          setIngredient={setIngredient}
-          handleClick={ingredient._id ? handleEdit : handleSave}
-          error={message}
-          allIngredients={allIngredients}
-        />
-      }
-    </Paper >
-  </> : <p>Cargando...</p>
+    <div className={classes.search}>
+      <AutocompleteInput
+        label='Buscar ingrediente'
+        onChange={(v) => { setIngredient(v || {}); setIsFormOpen(Boolean(v)) }}
+        getOptionLabel={option => `${option.name}`}
+        options={allIngredients}
+        variant='outlined'
+      />
+    </div>
+    <div className={classes.container}>
+      <Fab color="primary" aria-label="add" onClick={() => {
+        setIngredient({});
+        setIsFormOpen(!isFormOpen);
+      }}>
+        {isFormOpen
+          ? <Close />
+          : <AddIcon />}
+      </Fab>
+      {ingredient._id && <Fab className={classes.delete} color="secondary" onClick={handleDelete}>
+        <DeleteIcon className={classes.deleteIcon} />
+      </Fab>}
+    </div>
+    {isFormOpen && <IngredientsForm
+      ingredient={ingredient}
+      setIngredient={setIngredient}
+      handleClick={ingredient._id ? handleEdit : handleSave}
+      error={message}
+      allIngredients={allIngredients}
+      enums={enums}
+    />}
+  </> : <Loading />
 }
 
 export default Ingredients
