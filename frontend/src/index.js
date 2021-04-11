@@ -13,6 +13,9 @@ import FeedbackProvider from './contexts/feedback';
 import Recipes from './pages/recipes/Recipes';
 import Menus from './pages/Menus';
 import Patients from './pages/patients/Patients';
+import { Route, Redirect } from 'react-router-dom';
+
+import GruposAlimentosRaciones from './pages/patients/GruposAlimentosRaciones';
 
 ReactDOM.render(
     <BrowserRouter>
@@ -20,11 +23,12 @@ ReactDOM.render(
             <FeedbackProvider>
                 <ThemeProvider theme={theme}>
                     <App>
+                        <PrivateRoute path='/grupos-alimentos-raciones/:id' component={GruposAlimentosRaciones} />
                         <PrivateRoute path='/menus' component={Menus} />
                         <PrivateRoute path='/recipes' component={Recipes} />
                         <PrivateRoute path='/ingredients' component={Ingredients} />
                         <PrivateRoute path='/patients' component={Patients} />
-                        <PublicRoute path='/' component={Login} />
+                        <PublicRoute exact path='/' component={Login} />
                     </App>
                 </ThemeProvider>
             </FeedbackProvider>

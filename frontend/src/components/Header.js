@@ -2,6 +2,8 @@ import React, { useState, useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { Button, AppBar, Toolbar, IconButton, Menu, MenuItem, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { withRouter } from "react-router"
+
 import MenuIcon from '@material-ui/icons/Menu'
 
 import { AuthContext } from '../contexts/auth';
@@ -10,7 +12,7 @@ import { unauthorize } from '../services/api';
 
 const useStyles = makeStyles((theme) => ({
     header: {
-        display:'flex',
+        display: 'flex',
         justifyContent: 'flex-end'
     },
     link: {
@@ -25,6 +27,11 @@ const useStyles = makeStyles((theme) => ({
 
 
 const Header = (props) => {
+    const path = props.history.location.pathname
+
+    const isHidden = ['/grupos-alimentos-raciones'].some(route => path.includes(route))
+    // const isHidden = false
+
     const classes = useStyles()
 
     const { isLoggedIn, logOut } = useContext(AuthContext)
@@ -42,7 +49,7 @@ const Header = (props) => {
         }
     }
 
-    return <AppBar position="static">
+    return isHidden ? null : <AppBar position="static">
         <Toolbar className={classes.header}>
             {isLoggedIn && <>
                 <MenuItem onClick={() => setOpenMenu(false)}><Link className={classes.link} to='/patients'>Pacientes</Link></MenuItem>
@@ -55,4 +62,4 @@ const Header = (props) => {
     </AppBar>
 }
 
-export default Header
+export default withRouter(Header)

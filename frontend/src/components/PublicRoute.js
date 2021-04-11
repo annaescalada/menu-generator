@@ -10,7 +10,7 @@ const PublicRoute = ({ component: Component, ...rest }) => {
             {!isLoggedIn ? <Route
                 render={(props) => <Component {...props} />}
                 {...rest}
-            /> : <Redirect to='/ingredients' />}
+            /> : <Redirect to='/patients' />}
         </>
     );
 }

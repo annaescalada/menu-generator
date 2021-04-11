@@ -148,7 +148,7 @@ const seeds = [
         season: ['verano', 'primavera', 'otoño', 'invierno'],
         group: 'condimentos',
         portion: 0.5,
-        unit: 'u',
+        unit: 'U',
     },
     {
         name: 'Perejil',
@@ -159,6 +159,13 @@ const seeds = [
     },
     {
         name: 'Cilantro',
+        season: ['verano', 'primavera', 'otoño', 'invierno'],
+        group: 'condimentos',
+        portion: 1,
+        unit: 'cs',
+    },
+    {
+        name: 'Miso',
         season: ['verano', 'primavera', 'otoño', 'invierno'],
         group: 'condimentos',
         portion: 1,
@@ -199,26 +206,82 @@ const seeds = [
         season: ['verano', 'primavera', 'otoño', 'invierno'],
         group: 'huevos',
         portion: 1,
-        unit: 'u',
-        tags: 'huevo'
+        unit: 'U',
+        tags: ['huevo']
     },
     //pescado
     {
-        name: 'Pescado',
+        name: 'Merluza',
         season: ['verano', 'primavera', 'otoño', 'invierno'],
         group: 'pescados',
         portion: 100,
         unit: 'g',
-        tags: 'pescado'
+        tags: ['pescado']
+    },
+    {
+        name: 'Lenguado',
+        season: ['verano', 'primavera', 'otoño', 'invierno'],
+        group: 'pescados',
+        portion: 100,
+        unit: 'g',
+        tags: ['pescado']
+    },
+    {
+        name: 'Salmón',
+        season: ['verano', 'primavera', 'otoño', 'invierno'],
+        group: 'pescados',
+        portion: 100,
+        unit: 'g',
+        tags: ['pescado']
+    },
+    {
+        name: 'Atún',
+        season: ['verano', 'primavera', 'otoño', 'invierno'],
+        group: 'pescados',
+        portion: 100,
+        unit: 'g',
+        tags: ['pescado']
+    },
+    {
+        name: 'Sepia',
+        season: ['verano', 'primavera', 'otoño', 'invierno'],
+        group: 'pescados',
+        portion: 100,
+        unit: 'g',
+        tags: ['pescado']
     },
     //carnes
     {
-        name: 'Carne',
+        name: 'Pollo',
         season: ['verano', 'primavera', 'otoño', 'invierno'],
         group: 'carnes',
         portion: 100,
         unit: 'g',
-        tags: 'carne'
+        tags: ['carne']
+    },
+    {
+        name: 'Ternera',
+        season: ['verano', 'primavera', 'otoño', 'invierno'],
+        group: 'carnes',
+        portion: 100,
+        unit: 'g',
+        tags: ['carne']
+    },
+    {
+        name: 'Pavo',
+        season: ['verano', 'primavera', 'otoño', 'invierno'],
+        group: 'carnes',
+        portion: 100,
+        unit: 'g',
+        tags: ['carne']
+    },
+    {
+        name: 'Conejo',
+        season: ['verano', 'primavera', 'otoño', 'invierno'],
+        group: 'carnes',
+        portion: 100,
+        unit: 'g',
+        tags: ['carne']
     },
     //lácteos
     {
@@ -227,7 +290,7 @@ const seeds = [
         group: 'lácteos',
         portion: 1,
         unit: 'tz',
-        tags: 'lácteo'
+        tags: ['lácteo']
     },
     {
         name: 'Yogur',
@@ -235,7 +298,7 @@ const seeds = [
         group: 'lácteos',
         portion: 0.5,
         unit: 'tz',
-        tags: 'lácteo'
+        tags: ['lácteo']
     },
     {
         name: 'Queso',
@@ -243,20 +306,19 @@ const seeds = [
         group: 'lácteos',
         portion: 20,
         unit: 'g',
-        tags: 'lácteo'
+        tags: ['lácteo', 'semiprocesado']
     },
-    //lácteos vegetales
     {
         name: 'Leche vegetal',
         season: ['verano', 'primavera', 'otoño', 'invierno'],
-        group: 'lácteos vegetales',
+        group: 'lácteos',
         portion: 1,
         unit: 'tz',
     },
     {
         name: 'Yogur vegetal',
         season: ['verano', 'primavera', 'otoño', 'invierno'],
-        group: 'lácteos vegetales',
+        group: 'lácteos',
         portion: 0.5,
         unit: 'tz',
     },
@@ -326,21 +388,22 @@ const seeds = [
         season: ['verano', 'primavera', 'otoño', 'invierno'],
         group: 'frutos secos y oleaginosos',
         portion: 0.5,
-        unit: 'u',
+        unit: 'U',
     },
     {
         name: 'Coco rallado',
         season: ['verano', 'primavera', 'otoño', 'invierno'],
-        group: 'condimentos',
+        group: 'frutos secos y oleaginosos',
         portion: 1,
         unit: 'cs',
     },
     {
         name: 'Chocolate negro 85%',
         season: ['verano', 'primavera', 'otoño', 'invierno'],
-        group: 'condimentos',
+        group: 'frutos secos y oleaginosos',
         portion: 10,
         unit: 'g',
+        tags: ['semiprocesado']
     },
     //legumbres
     {
@@ -447,14 +510,14 @@ const seeds = [
         season: ['verano', 'primavera', 'otoño', 'invierno'],
         group: 'cereales',
         portion: 2,
-        unit: 'u',
+        unit: 'U',
     },
     {
         name: 'Tortitas de maíz',
         season: ['verano', 'primavera', 'otoño', 'invierno'],
         group: 'cereales',
         portion: 2,
-        unit: 'u',
+        unit: 'U',
         tags: ['semiprocesado']
     },
     {
@@ -463,10 +526,34 @@ const seeds = [
         group: 'cereales',
         portion: 50,
         unit: 'g',
-        tags: ['semiprocesado']
+        tags: ['semiprocesado', 'gluten']
     },
     {
         name: 'Pasta integral',
+        season: ['verano', 'primavera', 'otoño', 'invierno'],
+        group: 'cereales',
+        portion: 1,
+        unit: 'tz',
+        tags: ['semiprocesado', 'gluten']
+    },
+    {
+        name: 'Pan integral (sin gluten)',
+        season: ['verano', 'primavera', 'otoño', 'invierno'],
+        group: 'cereales',
+        portion: 50,
+        unit: 'g',
+        tags: ['semiprocesado']
+    },
+    {
+        name: 'Pasta integral (sin gluten)',
+        season: ['verano', 'primavera', 'otoño', 'invierno'],
+        group: 'cereales',
+        portion: 1,
+        unit: 'tz',
+        tags: ['semiprocesado']
+    },
+    {
+        name: 'Fideos de arroz',
         season: ['verano', 'primavera', 'otoño', 'invierno'],
         group: 'cereales',
         portion: 1,
@@ -479,14 +566,14 @@ const seeds = [
         season: ['verano', 'primavera', 'otoño', 'invierno'],
         group: 'tubérculos',
         portion: 2,
-        unit: 'u',
+        unit: 'U',
     },
     {
         name: 'Boniato',
         season: ['verano', 'primavera', 'otoño', 'invierno'],
         group: 'tubérculos',
         portion: 1,
-        unit: 'u',
+        unit: 'U',
     },
     //crucíferas
     {
@@ -594,7 +681,7 @@ const seeds = [
         season: ['otoño', 'invierno'],
         group: 'otras verduras',
         portion: 1,
-        unit: 'u',
+        unit: 'U',
     },
     {
         name: 'Apio',
@@ -615,13 +702,6 @@ const seeds = [
         season: ['verano', 'primavera', 'otoño', 'invierno'],
         group: 'otras verduras',
         portion: 1,
-        unit: 'tz',
-    },
-    {
-        name: 'Calabacín+',
-        season: ['verano', 'primavera', 'otoño', 'invierno'],
-        group: 'otras verduras',
-        portion: 2,
         unit: 'tz',
     },
     {
@@ -667,13 +747,6 @@ const seeds = [
         unit: 'tz',
     },
     {
-        name: 'Puerro+',
-        season: ['primavera', 'otoño', 'invierno'],
-        group: 'otras verduras',
-        portion: 2,
-        unit: 'tz',
-    },
-    {
         name: 'Champiñones',
         season: ['verano', 'primavera', 'otoño', 'invierno'],
         group: 'otras verduras',
@@ -716,24 +789,10 @@ const seeds = [
         unit: 'tz',
     },
     {
-        name: 'Zanahoria+',
-        season: ['verano', 'primavera', 'otoño', 'invierno'],
-        group: 'otras verduras',
-        portion: 2,
-        unit: 'tz',
-    },
-    {
         name: 'Calabaza',
         season: ['primavera', 'otoño', 'invierno'],
         group: 'otras verduras',
         portion: 1,
-        unit: 'tz',
-    },
-    {
-        name: 'Calabaza+',
-        season: ['primavera', 'otoño', 'invierno'],
-        group: 'otras verduras',
-        portion: 2,
         unit: 'tz',
     },
     //frutas
@@ -742,49 +801,49 @@ const seeds = [
         season: ['otoño'],
         group: 'frutas',
         portion: 1,
-        unit: 'u',
+        unit: 'U',
     },
     {
         name: 'Kiwi',
         season: ['otoño', 'invierno'],
         group: 'frutas',
         portion: 2,
-        unit: 'u',
+        unit: 'U',
     },
     {
         name: 'Mandarina',
         season: ['otoño', 'invierno'],
         group: 'frutas',
         portion: 2,
-        unit: 'u',
+        unit: 'U',
     },
     {
         name: 'Manzana',
         season: ['verano', 'primavera', 'otoño', 'invierno'],
         group: 'frutas',
         portion: 1,
-        unit: 'u',
+        unit: 'U',
     },
     {
         name: 'Pera',
         season: ['verano', 'primavera', 'otoño', 'invierno'],
         group: 'frutas',
         portion: 1,
-        unit: 'u',
+        unit: 'U',
     },
     {
         name: 'Taronja',
         season: ['primavera', 'otoño', 'invierno'],
         group: 'frutas',
         portion: 1,
-        unit: 'u',
+        unit: 'U',
     },
     {
         name: 'Dátil',
         season: ['verano', 'primavera', 'otoño', 'invierno'],
         group: 'frutas',
         portion: 4,
-        unit: 'u',
+        unit: 'U',
     },
     {
         name: 'Pasas',
@@ -805,7 +864,7 @@ const seeds = [
         season: ['verano', 'primavera', 'otoño', 'invierno'],
         group: 'frutas',
         portion: 0.5,
-        unit: 'u',
+        unit: 'U',
     },
     {
         name: 'Mango congelado',
@@ -819,7 +878,7 @@ const seeds = [
         season: ['verano', 'primavera', 'otoño', 'invierno'],
         group: 'frutas',
         portion: 1,
-        unit: 'u',
+        unit: 'U',
     },
     {
         name: 'Plátano congelado',
@@ -833,35 +892,35 @@ const seeds = [
         season: ['verano', 'primavera'],
         group: 'frutas',
         portion: 2,
-        unit: 'u',
+        unit: 'U',
     },
     {
         name: 'Ciruela',
         season: ['verano', 'primavera'],
         group: 'frutas',
         portion: 2,
-        unit: 'u',
+        unit: 'U',
     },
     {
         name: 'Higos',
         season: ['verano'],
         group: 'frutas',
         portion: 2,
-        unit: 'u',
+        unit: 'U',
     },
     {
         name: 'Melocotón',
         season: ['verano', 'primavera'],
         group: 'frutas',
         portion: 1,
-        unit: 'u',
+        unit: 'U',
     },
     {
         name: 'Nectarina',
         season: ['verano', 'primavera'],
         group: 'frutas',
         portion: 1,
-        unit: 'u',
+        unit: 'U',
     },
     {
         name: 'Uvas',
@@ -915,14 +974,14 @@ const seeds = [
     },
     {
         name: 'Granada',
-        season: ['verano','otoño'],
+        season: ['verano', 'otoño'],
         group: 'frutos rojos',
         portion: 0.5,
         unit: 'tz',
     },
     {
         name: 'Mora',
-        season: ['verano','otoño'],
+        season: ['verano', 'otoño'],
         group: 'frutos rojos',
         portion: 0.5,
         unit: 'tz',

@@ -23,7 +23,7 @@ router.patch('/ingredient/:id', auth, async (req, res) => {
         const ingredient = await Ingredient.findById(req.params.id)
 
         if (!ingredient) res.status(404).send('Ingredient not found')
-        
+
         updates.forEach(update => ingredient[update] = req.body[update])
 
         await ingredient.save()
@@ -41,17 +41,17 @@ router.get('/ingredient/:id', auth, async (req, res) => {
         if (!ingredient) res.status(404).send('Ingredient not found')
 
         res.send.status(200).send({ ingredient })
-    } catch(e) {
+    } catch (e) {
         res.status(400).send(e)
     }
 })
 
 router.get('/ingredients', auth, async (req, res) => {
     try {
-        const ingredients = await Ingredient.find().populate('ingredients')
+        const ingredients = await Ingredient.find().populate('ingredients').sort({ 'name': 1 })
 
         res.status(200).send({ ingredients })
-    } catch(e) {
+    } catch (e) {
         res.status(400).send(e)
     }
 })

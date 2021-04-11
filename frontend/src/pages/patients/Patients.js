@@ -37,13 +37,16 @@ const Patients = () => {
     const [enums, setEnums] = useState()
     const [isFormOpen, setIsFormOpen] = useState()
     const [allPatients, setAllPatients] = useState()
-    const [patient, setPatient] = useState({})
+    const [patient, setPatient] = useState({
+        name: '',
+        email: '',
+        phone: '',
+        height: ''
+    })
 
     const getPatient = async (id) => {
         try {
-            console.log(id)
             const { data: { patient: retrievedPatient } } = await patientService.getPatient(id)
-            console.log(retrievedPatient)
             setPatient({
                 ...retrievedPatient,
                 age: moment().diff(moment(retrievedPatient.dateOfBirth), 'years')
@@ -57,7 +60,6 @@ const Patients = () => {
         try {
             const { data: { patients: retrievedPatients } } = await patientService.getAllPatients()
             setAllPatients(retrievedPatients)
-            console.log(retrievedPatients)
         } catch (e) {
             console.log(e ?.response ?.data)
         }
@@ -82,9 +84,8 @@ const Patients = () => {
 
     const handleSave = async () => {
         try {
-            await patientService.create(patient)
-            setPatient({})
-            setIsFormOpen(false)
+            const { data: { patient: createdPatient }} = await patientService.create(patient)
+            setPatient(createdPatient)
             getAllPatients()
 
             setMessage('Patient created')

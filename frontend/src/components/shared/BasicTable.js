@@ -20,22 +20,20 @@ const useStyles = makeStyles({
 const BasicTable = ({ rows, values }) => {
   const classes = useStyles()
 
-  console.log(rows)
-
   return <TableContainer component={Paper}>
-      <Table className={classes.table} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            {rows.map(row => <TableCell>{row.label}</TableCell>)}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {values.map(value => <TableRow key={value.date}>
-            {rows.map(row => <TableCell>{value[row.key]}</TableCell>)}
-          </TableRow>)}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <Table className={classes.table} aria-label="simple table">
+      <TableHead>
+        <TableRow>
+          {rows.map(row => <TableCell>{row.label}</TableCell>)}
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {values.map(value => <TableRow key={value.date}>
+          {rows.map(row => <TableCell>{value[row.key]}</TableCell>)}
+        </TableRow>)}
+      </TableBody>
+    </Table>
+  </TableContainer>
 }
 
 export default BasicTable

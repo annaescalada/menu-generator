@@ -24,7 +24,7 @@ router.patch('/patient/:id', auth, async (req, res) => {
         const patient = await Patient.findById(req.params.id)
 
         if (!patient) res.status(404).send('Patient not found')
-        
+
         updates.forEach(update => patient[update] = req.body[update])
 
         await patient.save()
@@ -40,7 +40,7 @@ router.get('/patients', auth, async (req, res) => {
         const patients = await Patient.find().select('name')
 
         res.status(200).send({ patients })
-    } catch(e) {
+    } catch (e) {
         res.status(400).send(e)
     }
 })
@@ -52,7 +52,7 @@ router.get('/patient/:id', auth, async (req, res) => {
         if (!patient) res.status(404).send('Patient not found')
 
         res.status(200).send({ patient })
-    } catch(e) {
+    } catch (e) {
         console.log(e)
         res.status(400).send(e)
     }
@@ -63,6 +63,8 @@ router.delete('/patient/:id', auth, async (req, res) => {
         const patient = await Patient.findById(req.params.id)
 
         await patient.remove()
+
+        await Check.deleteMany({ patient: req.params.id })
 
         res.send(patient)
     } catch (e) {
@@ -89,7 +91,7 @@ router.patch('/patient/check/:id', auth, async (req, res) => {
         const check = await Check.findById(req.params.id)
 
         if (!check) res.status(404).send('Check not found')
-        
+
         updates.forEach(update => check[update] = req.body[update])
 
         await check.save()
@@ -108,6 +110,7 @@ router.delete('/patient/check/:id', auth, async (req, res) => {
 
         res.send(check)
     } catch (e) {
+         console.log(e)
         res.status(500).send()
     }
 })
