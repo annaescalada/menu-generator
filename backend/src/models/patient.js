@@ -50,7 +50,56 @@ const patientSchema = new mongoose.Schema({
         enum: daysEnum
     }],
     portionDistribution: {
-
+        type: [{
+            name: String,
+            time: String,
+            carbs: Number,
+            proteins: Number,
+            veggies: Number,
+            fats: Number,
+            dairy: Number,
+            omega3: Number,
+            fruit: Number,
+            berries: Number,
+        }],
+        default: [
+            {
+                name: 'Desayuno',
+                time: '9:00',
+                carbs: 1,
+                proteins: 0,
+                veggies: 0,
+                fats: 1,
+                dairy: 1,
+                omega3: 1,
+                fruit: 2,
+                berries: 1,
+            },
+            {
+                name: 'Comida',
+                time: '14:00',
+                carbs: 1,
+                proteins: 1,
+                veggies: 1,
+                fats: 1,
+                dairy: 0,
+                omega3: 0,
+                fruit: 0,
+                berries: 0,
+            },
+            {
+                name: 'Cena',
+                time: '20:00',
+                carbs: 1,
+                proteins: 1,
+                veggies: 1,
+                fats: 1,
+                dairy: 0,
+                omega3: 0,
+                fruit: 0,
+                berries: 0,
+            },
+        ]
     },
     history: {
         type: String,

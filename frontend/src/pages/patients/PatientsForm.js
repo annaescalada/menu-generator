@@ -12,6 +12,7 @@ import ChecksForm from './CheckForm'
 import { Editor, EditorState } from 'draft-js';
 import EditableInput from '../../components/shared/EditableInput'
 import { Link } from 'react-router-dom'
+import PortionDistribution from './PortionDistribution';
 
 
 
@@ -28,17 +29,22 @@ const useStyles = makeStyles((theme) => ({
         padding: '2em'
 
     },
-    chipContainer: {
-        display: 'flex',
-        margin: '1em',
-        padding: '1em'
-    },
     chip: {
         margin: '0.2em',
         color: 'white',
         padding: '0.5em',
         maxWidth: 'fit-content'
     },
+    link: {
+        margin:'1em',
+        textDecoration: 'none',
+        display: 'flex',
+        justifyContent: 'center'
+    },
+    docButton: {
+        color: theme.palette.primary.main,
+        margin: '1.5em 0 0 0'
+    }
 }))
 
 const PatientsForm = ({ patient, setPatient, error, handleClick, enums }) => {
@@ -120,6 +126,9 @@ const PatientsForm = ({ patient, setPatient, error, handleClick, enums }) => {
             options={enums.tagEnum}
             disabled={patient.isComplex}
         />
+        <Link className={classes.link} to={`/grupos-alimentos-raciones/${patient._id}`}>
+            <Button className={classes.docButton} onClick={() => { }} color="primary" variant="outlined">Grupos de alimentos y raciones</Button>
+        </Link>
         <SelectInput
             label="Utensils"
             multiple
@@ -134,9 +143,9 @@ const PatientsForm = ({ patient, setPatient, error, handleClick, enums }) => {
             onChange={(v) => setPatient(prev => ({ ...prev, preparationDays: v }))}
             options={enums.daysEnum}
         />
-
-        <Link to={`/grupos-alimentos-raciones/${patient._id}`}>
-            <Typography>Grupos de alimentos y raciones</Typography>
+        <PortionDistribution patient={patient} setPatient={setPatient} handleClick={handleClick}/>
+        <Link className={classes.link} to={`/menu-base/${patient._id}`}>
+            <Button className={classes.docButton} onClick={() => { }} color="primary" variant="outlined">Menu básico</Button>
         </Link>
         <Divider style={{ margin: '3em 0' }} />
         <Typography align='center' variant='h6' color='primary'>History</Typography>

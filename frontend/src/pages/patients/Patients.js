@@ -96,13 +96,13 @@ const Patients = () => {
 
     const handleEdit = async () => {
         try {
-            await patientService.edit(patient._id, patient)
-            setPatient({})
-            setIsFormOpen(false)
+            const { data: { patient: updatedPatient }} = await patientService.edit(patient._id, patient)
+            setPatient(updatedPatient)
             getAllPatients()
 
             setMessage('Patient updated')
         } catch (e) {
+            console.log(e)
             setMessage('Error editing patient')
         }
     }

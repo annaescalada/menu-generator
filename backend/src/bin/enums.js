@@ -26,5 +26,15 @@ module.exports = {
         'snack',
     ],
     genderEnum: ['hombre', 'mujer'],
-    daysEnum: ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo']
+    daysEnum: ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo'],
+    reparticiónRaciones: [
+        'carbs',
+        'proteins',
+        'veggies',
+        'fats',
+        'dairy',
+        'omega3',
+        'fruit',
+        'berries',
+    ]
 }

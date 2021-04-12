@@ -16,6 +16,7 @@ import Patients from './pages/patients/Patients';
 import { Route, Redirect } from 'react-router-dom';
 
 import GruposAlimentosRaciones from './pages/patients/GruposAlimentosRaciones';
+import MenuBase from './pages/patients/MenuBase';
 
 ReactDOM.render(
     <BrowserRouter>
@@ -23,6 +24,7 @@ ReactDOM.render(
             <FeedbackProvider>
                 <ThemeProvider theme={theme}>
                     <App>
+                        <PrivateRoute path='/menu-base/:id' component={MenuBase} />
                         <PrivateRoute path='/grupos-alimentos-raciones/:id' component={GruposAlimentosRaciones} />
                         <PrivateRoute path='/menus' component={Menus} />
                         <PrivateRoute path='/recipes' component={Recipes} />

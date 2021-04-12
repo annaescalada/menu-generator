@@ -88,7 +88,7 @@ const GruposAlimentosRaciones = (props) => {
 
     return <>
         <div className={classes.container}>
-            <Typography variant='h6' color='primary'>Grupos de alimentos y ración recomendada</Typography>
+            <Typography variant='h5' color='primary'>Grupos de alimentos y ración recomendada</Typography>
             <Typography variant='subtitle2'>{patient.name} - {moment().format('DD/MM/yy')}</Typography>
 
             <div>
