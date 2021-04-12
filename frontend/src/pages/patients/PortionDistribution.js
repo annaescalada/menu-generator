@@ -1,18 +1,19 @@
 import React, { useState } from 'react'
 import _ from 'lodash'
-import { Typography, Paper, makeStyles, Fab, Grid, Chip } from '@material-ui/core'
+import { Typography, Paper, makeStyles, Fab, Grid, Chip, Button } from '@material-ui/core'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import TextInput from '../../components/shared/TextInput'
 import AddIcon from '@material-ui/icons/Add'
-import DeleteIcon from '@material-ui/icons/Delete'
-import FreeBreakfastIcon from '@material-ui/icons/FreeBreakfast';
-import RestaurantIcon from '@material-ui/icons/Restaurant';
+
+import PortionCard from './PortionCard';
 
 
 const useStyles = makeStyles((theme) => ({
     container: {
         margin: '1em',
-        padding: '0.8em'
+        padding: '0.8em',
+        backgroundColor: theme.palette.primary.extraLight,
+        borderRadius: '20px',
     },
     icon: {
         color: 'white'
@@ -28,6 +29,10 @@ const useStyles = makeStyles((theme) => ({
         color: 'white',
         padding: '0.5em',
         maxWidth: 'fit-content'
+    },
+    img: {
+        height: '3em',
+        marginLeft: '1.5em'
     },
 }))
 
@@ -94,13 +99,13 @@ const PortionDistribution = ({ patient, setPatient, handleClick }) => {
             },
             lunch: {
                 carbs: 1,
-                proteins: 0,
-                veggies: 0,
+                proteins: 1,
+                veggies: 1,
                 fats: 1,
-                dairy: 1,
-                omega3: 1,
-                fruit: 2,
-                berries: 1,
+                dairy: 0,
+                omega3: 0,
+                fruit: 0,
+                berries: 0,
             },
             snack: {
                 carbs: 1,
@@ -143,35 +148,15 @@ const PortionDistribution = ({ patient, setPatient, handleClick }) => {
                         ref={provided.innerRef}
                         {...provided.droppableProps}
                     >
-                        {patient.portionDistribution ?.map((meal, index) => <Draggable
-                            draggableId={meal._id}
+                        {patient.portionDistribution ?.map((meal, index) => <PortionCard 
+                            key={meal._id}
+                            classes={classes}
+                            meal={meal}
                             index={index}
-                        >
-                            {(provided) => (
-                                <Paper
-                                    className={classes.container}
-                                    ref={provided.innerRef}
-                                    {...provided.draggableProps}
-                                    {...provided.dragHandleProps}
-                                >
-                                    <Grid container>
-                                        <Grid item xs={6}><TextInput value={meal.name} onChange={(v) => handleChange(v, 'name', index)} /></Grid>
-                                        <Grid item xs={5}><TextInput value={meal.time} onChange={(v) => handleChange(v, 'time', index)} /></Grid>
-                                        <Grid item xs={1}><Fab color="secondary" size='medium' onClick={() => handleDelete(index)}>
-                                            <DeleteIcon className={classes.icon} />
-                                        </Fab></Grid>
-                                    </Grid>
-                                    <Grid spacing={2} alignItems='center' container>
-                                        {['carbs', 'proteins', 'veggies', 'fats', 'omega3', 'fruit', 'berries', 'dairy'].map(key => <Grid item xs={1}>
-                                            <TextInput type='number' label={key} value={meal[key] || 0} onChange={(v) => handleChange(v, key, index)} />
-                                        </Grid>)}
-                                        <Grid item><Fab variant='extended' size='small' color="primary" onClick={() => setMeal('breakfast', index)}>Desayuno</Fab></Grid>
-                                        <Grid item><Fab variant='extended' size='small' color="primary" onClick={() => setMeal('lunch', index)}>Comida</Fab></Grid>
-                                        <Grid item><Fab variant='extended' size='small' color="primary" onClick={() => setMeal('snack', index)}>Snack</Fab></Grid>
-                                    </Grid>
-                                </Paper>
-                            )}
-                        </Draggable>
+                            setMeal={setMeal}
+                            handleChange={handleChange}
+                            handleDelete={handleDelete}
+                        />
                         )}
                         {provided.placeholder}
                     </div>

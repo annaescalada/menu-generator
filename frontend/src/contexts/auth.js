@@ -8,6 +8,12 @@ const AuthProvider = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState()
     const [user, setUser] = useState({})
     const [isLoading, setIsLoading] = useState()
+    const [selectedPatient, setSelectedPatient] = useState({
+        name: '',
+        email: '',
+        phone: '',
+        height: ''
+    })
 
     useEffect(() => {
         setIsLoading(true)
@@ -40,7 +46,7 @@ const AuthProvider = ({ children }) => {
 
     return <>
         {isLoading ? <Loading /> : (
-            <AuthContext.Provider value={{ user, isLoggedIn, me: getMe, logOut: logMeOut }}>
+            <AuthContext.Provider value={{ user, isLoggedIn, me: getMe, logOut: logMeOut, selectedPatient, setSelectedPatient }}>
                 {children}
             </AuthContext.Provider>
         )}

@@ -11,6 +11,7 @@ import { FeedbackContext } from '../../contexts/feedback';
 import Loading from '../../components/shared/Loading';
 import patientService from '../../services/patient';
 import PatientsForm from './PatientsForm';
+import { AuthContext } from '../../contexts/auth';
 
 const useStyles = makeStyles((theme) => ({
     search: {
@@ -32,20 +33,21 @@ const useStyles = makeStyles((theme) => ({
 const Patients = () => {
     const classes = useStyles()
 
+    const { selectedPatient: patient, setSelectedPatient: setPatient } = useContext(AuthContext)
     const { message, setMessage } = useContext(FeedbackContext)
 
     const [enums, setEnums] = useState()
-    const [isFormOpen, setIsFormOpen] = useState()
+    const [isFormOpen, setIsFormOpen] = useState(patient._id)
     const [allPatients, setAllPatients] = useState()
-    const [patient, setPatient] = useState({
-        name: '',
-        email: '',
-        phone: '',
-        height: ''
-    })
 
     const getPatient = async (id) => {
         try {
+            if (!id) setPatient({
+                name: '',
+                email: '',
+                phone: '',
+                height: ''
+            })
             const { data: { patient: retrievedPatient } } = await patientService.getPatient(id)
             setPatient({
                 ...retrievedPatient,
@@ -84,7 +86,7 @@ const Patients = () => {
 
     const handleSave = async () => {
         try {
-            const { data: { patient: createdPatient }} = await patientService.create(patient)
+            const { data: { patient: createdPatient } } = await patientService.create(patient)
             setPatient(createdPatient)
             getAllPatients()
 
@@ -96,7 +98,7 @@ const Patients = () => {
 
     const handleEdit = async () => {
         try {
-            const { data: { patient: updatedPatient }} = await patientService.edit(patient._id, patient)
+            const { data: { patient: updatedPatient } } = await patientService.edit(patient._id, patient)
             setPatient(updatedPatient)
             getAllPatients()
 
@@ -124,10 +126,12 @@ const Patients = () => {
         <div className={classes.search}>
             <AutocompleteInput
                 label='Buscar paciente'
-                onChange={(v) => { getPatient(v ?._id || {}); setIsFormOpen(Boolean(v)) }}
+                onChange={(v) => { getPatient(v ?._id || null); setIsFormOpen(Boolean(v)) }}
                 getOptionLabel={option => `${option.name}`}
                 options={allPatients}
                 variant='outlined'
+                getOptionSelected={(option, value) => option ?.name === patient.name}
+                value={patient.name}
             />
         </div>
         <div className={classes.container}>

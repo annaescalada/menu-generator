@@ -13,7 +13,6 @@ import FeedbackProvider from './contexts/feedback';
 import Recipes from './pages/recipes/Recipes';
 import Menus from './pages/Menus';
 import Patients from './pages/patients/Patients';
-import { Route, Redirect } from 'react-router-dom';
 
 import GruposAlimentosRaciones from './pages/patients/GruposAlimentosRaciones';
 import MenuBase from './pages/patients/MenuBase';
