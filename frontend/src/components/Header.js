@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
 const Header = (props) => {
     const path = props.history.location.pathname
 
-    const isHidden = ['/grupos-alimentos-raciones'].some(route => path.includes(route))
+    const isHidden = ['/grupos-alimentos-raciones', 'menu-base', 'recipe-group', 'menu-grid', 'grocery-list', 'meal-prep'].some(route => path.includes(route))
     // const isHidden = false
 
     const classes = useStyles()
@@ -53,6 +53,7 @@ const Header = (props) => {
         <Toolbar className={classes.header}>
             {isLoggedIn && <>
                 <MenuItem onClick={() => setOpenMenu(false)}><Link className={classes.link} to='/patients'>Pacientes</Link></MenuItem>
+                <MenuItem onClick={() => setOpenMenu(false)}><Link className={classes.link} to='/plans'>Plans</Link></MenuItem>
                 <MenuItem onClick={() => setOpenMenu(false)}><Link className={classes.link} to='/ingredients'>Ingredientes</Link></MenuItem>
                 <MenuItem onClick={() => setOpenMenu(false)}><Link className={classes.link} to='/recipes'>Recetas</Link></MenuItem>
                 <MenuItem onClick={() => setOpenMenu(false)}><Link className={classes.link} to='/menus'>Menus</Link></MenuItem>

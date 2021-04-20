@@ -1,9 +1,10 @@
-import React from 'react'
-import { Button, makeStyles, Paper, Chip, Grid } from '@material-ui/core'
+import React, { useEffect } from 'react'
+import { Button, makeStyles, Paper, Chip, Grid, Typography } from '@material-ui/core'
 import _ from 'lodash'
 import TextInput from '../../components/shared/TextInput'
 import SelectInput from '../../components/shared/SelectInput'
 import AutocompleteInput from '../../components/shared/AutocompleteInput'
+import EditableInput from '../../components/shared/EditableInput';
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -25,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
     input: {
         background: theme.palette.primary.extraLight,
         borderRadius: '20px',
+        padding: '0em',
         margin: '0.5em'
     },
     chip: {
@@ -32,18 +34,42 @@ const useStyles = makeStyles((theme) => ({
         color: 'white',
         padding: '0.5em'
     },
+    img: {
+        height: '3em',
+        marginTop: '-2em'
+    },
 }))
 
 const RecipesForm = ({ recipe, setRecipe, error, handleClick, allIngredients, enums }) => {
     const classes = useStyles()
 
-    const getSeasons = () => _.intersection(...['carbs', 'proteins', 'veggies', 'fats', 'dairy', 'omega3', 'fruit', 'berries', 'condiments']
+    const getSeasons = () => _.intersection(...enums.recipeGroups
         .map(key => _.intersection(...recipe[key] ?.map(ingredient => ingredient.season) || [] ))
         .filter(el => el.length))
 
-    const getTags = () => _.union(...['carbs', 'proteins', 'veggies', 'fats', 'dairy', 'omega3', 'fruit', 'berries', 'condiments']
-        .map(key => _.union(...recipe[key] ?.map(ingredient => ingredient.tags) || [] ))
-        .filter(el => el.length))
+    const getTags = () => {
+        const ingredientsByGroup = enums.recipeGroups.map(group => recipe[group])
+        return _.union(...ingredientsByGroup).length ? getIngredientTags(_.union(...ingredientsByGroup)) : []
+    }
+
+    const getIngredientTags = (ingredients) => {
+        const ingredientTags = ingredients.map(ingredient => ingredient.tags)
+
+        const ingredientExclusiveTags = ingredientTags.map(ingredientTag => ingredientTag.filter(tag => enums.exclusiveTags.includes(tag)))
+
+        return [..._.union(...ingredientExclusiveTags),
+        ..._.intersection(...ingredientTags, enums.inclusiveTags)]
+    }
+
+    console.log(allIngredients.filter(el => ['condimentos'].includes(el.group)))
+
+    useEffect(() => {
+        setRecipe(prev => ({
+            ...prev,
+            season: getSeasons(),
+            tags: getTags()
+        }))
+    }, [recipe.carbs, recipe.proteins, recipe.veggies, recipe.fats, recipe.dairy, recipe.omega3, recipe.fruit, recipe.berries, recipe.condiments])
 
     return <Paper className={classes.container}>
         <TextInput
@@ -61,129 +87,94 @@ const RecipesForm = ({ recipe, setRecipe, error, handleClick, allIngredients, en
             options={enums.mealEnum}
             error={error && !recipe.meal}
         />
-        <div className={classes.chipContainer}>
-            {getSeasons().map(season => <Chip className={classes.chip} label={season} color='primary' />)}
-            {getTags().map(tag => <Chip className={classes.chip} label={tag} color='secondary' />)}
-        </div>
-        <Grid container justify='center'>
-            <Grid className={(recipe.meal === 'desayuno' || recipe.meal === 'comida') && classes.input} item xs={5}>
-                <AutocompleteInput
-                    label="Carbs"
-                    value={recipe.carbs || []}
-                    onChange={(v) => setRecipe(prev => ({ ...prev, carbs: v }))}
-                    required={recipe.meal === 'desayuno' || recipe.meal === 'comida'}
-                    getOptionLabel={option => `${option.portion}${option.unit} ${option.name}`}
-                    multiple
-                    options={allIngredients.filter(el => el.group === 'cereales' || el.group === 'tubérculos')}
-                />
+        <SelectInput
+            label={`Tags`}
+            multiple
+            value={recipe.tags || []}
+            onChange={(v) => setRecipe(prev => ({ ...prev, tags: v }))}
+            options={[...enums.inclusiveTags, ...enums.exclusiveTags]}
+        />
+        {recipe.meal && <>
+            <div className={classes.chipContainer}>
+                {recipe.season ?.map(season => <Chip className={classes.chip} label={season} color='primary' />)}
+                {/* {recipe.tags ?.map(tag => <Chip className={classes.chip} label={tag} color='secondary' />)} */}
+            </div>
+            <Grid container justify='center'>
+                {[
+                    {
+                        required: (recipe.meal === 'desayuno' || recipe.meal === 'comida' || recipe.meal === 'snack'),
+                        icon: 'cereales',
+                        group: 'carbs',
+                        options: ['cereales', 'tubérculos']
+                    },
+                    {
+                        required: (recipe.meal === 'comida'),
+                        icon: 'legumbres',
+                        group: 'proteins',
+                        options: ['legumbres', 'carnes', 'pescados', 'huevos']
+                    },
+                    {
+                        required: (recipe.meal === 'comida'),
+                        icon: 'hortalizas',
+                        group: 'veggies',
+                        factor: recipe.meal === 'comida' ? 3 : 1,
+                        options: ['otras verduras', 'cruciferas', 'hortalizas']
+                    },
+                    {
+                        required: recipe.meal === 'desayuno' || recipe.meal === 'comida' || recipe.meal === 'snack',
+                        icon: 'frutos_secos_y_oleaginosos',
+                        group: 'fats',
+                        options: ['frutos secos y oleaginosos']
+                    },
+                    {
+                        required: recipe.meal === 'desayuno',
+                        icon: 'lácteos',
+                        group: 'dairy',
+                        options: ['lácteos', 'lácteos vegetales']
+                    },
+                    {
+                        required: recipe.meal === 'desayuno',
+                        icon: 'omega_3',
+                        group: 'omega3',
+                        options: ['omega 3']
+                    },
+                    {
+                        required: recipe.meal === 'desayuno',
+                        icon: 'frutas',
+                        group: 'fruit',
+                        factor: recipe.meal === 'desayuno' ? 2 : 1,
+                        options: ['frutas']
+                    },
+                    {
+                        required: recipe.meal === 'desayuno',
+                        icon: 'frutos_rojos',
+                        group: 'berries',
+                        options: ['frutos rojos']
+                    },
+                    {
+                        icon: 'condimentos',
+                        group: 'condiments',
+                        options: ['condimentos']
+                    },
+                ].map(({ required = false, icon, group, factor = 1, options = [] }) => <Grid className={required && classes.input} item xs={5}>
+                    <AutocompleteInput
+                        label={<img className={classes.img} src={`/images/Food-icons/${icon}.png`} alt="icon meal" />}
+                        value={recipe[group] || []}
+                        onChange={(v) => setRecipe(prev => ({ ...prev, [group]: v }))}
+                        required={required}
+                        getOptionLabel={option => `${(group === 'condiments' ? option.portion : option.portion * factor / (recipe[group] ?.length || 1)) ?.toFixed(2)}${option.unit} ${option.name}`}
+                        multiple
+                        options={allIngredients.filter(el => options.includes(el.group))}
+                    />
+                </Grid>)}
             </Grid>
-            <Grid className={recipe.meal === 'comida' && classes.input} item xs={5}>
-                <AutocompleteInput
-                    label="Proteins"
-                    value={recipe.proteins || []}
-                    onChange={(v) => setRecipe(prev => ({ ...prev, proteins: v }))}
-                    required={recipe.meal === 'comida'}
-                    getOptionLabel={option => `${option.portion}${option.unit} ${option.name}`}
-                    multiple
-                    options={allIngredients.filter(el => el.group === 'legumbres' || el.group === 'pescados' || el.group === 'huevos' || el.group === 'carnes')}
-                />
-            </Grid>
-        </Grid>
-        <Grid container justify='center'>
-            <Grid className={recipe.meal === 'comida' && classes.input} item xs={5}>
-                <AutocompleteInput
-                    label="Veggies"
-                    value={recipe.veggies || []}
-                    onChange={(v) => setRecipe(prev => ({ ...prev, veggies: v }))}
-                    required={recipe.meal === 'comida'}
-                    getOptionLabel={option => `${option.portion}${option.unit} ${option.name} (${option.group})`}
-                    multiple
-                    options={allIngredients.filter(el => el.group === 'otras verduras' || el.group === 'crucíferas' || el.group === 'hortalizas')}
-                />
-            </Grid>
-            <Grid className={(recipe.meal === 'desayuno' || recipe.meal === 'comida') && classes.input} item xs={5}>
-                <AutocompleteInput
-                    label="Fats"
-                    value={recipe.fats || []}
-                    onChange={(v) => setRecipe(prev => ({ ...prev, fats: v }))}
-                    required={recipe.meal === 'comida' || recipe.meal === 'desayuno'}
-                    getOptionLabel={option => `${option.portion}${option.unit} ${option.name}`}
-                    multiple
-                    options={allIngredients.filter(el => el.group === 'frutos secos y oleaginosos')}
-                />
-            </Grid>
-        </Grid>
-        <Grid container justify='center'>
-            <Grid className={recipe.meal === 'desayuno' && classes.input} item xs={5}>
-                <AutocompleteInput
-                    label="Dairy"
-                    value={recipe.dairy || []}
-                    onChange={(v) => setRecipe(prev => ({ ...prev, dairy: v }))}
-                    required={recipe.meal === 'desayuno'}
-                    getOptionLabel={option => `${option.portion}${option.unit} ${option.name}`}
-                    multiple
-                    options={allIngredients.filter(el => el.group === 'lácteos' || el.group === 'lácteos vegetales')}
-                />
-            </Grid>
-            <Grid className={recipe.meal === 'desayuno' && classes.input} item xs={5}>
-                <AutocompleteInput
-                    label="Omega 3"
-                    value={recipe.omega3 || []}
-                    onChange={(v) => setRecipe(prev => ({ ...prev, omega3: v }))}
-                    required={recipe.meal === 'desayuno'}
-                    getOptionLabel={option => `${option.portion}${option.unit} ${option.name}`}
-                    multiple
-                    options={allIngredients.filter(el => el.group === 'omega 3')}
-                />
-            </Grid>
-        </Grid>
-        <Grid container justify='center'>
-            <Grid className={recipe.meal === 'desayuno' && classes.input} item xs={5}>
-                <AutocompleteInput
-                    label="Fruit"
-                    value={recipe.fruit || []}
-                    onChange={(v) => setRecipe(prev => ({ ...prev, fruit: v }))}
-                    required={recipe.meal === 'desayuno'}
-                    getOptionLabel={option => `${option.portion}${option.unit} ${option.name}`}
-                    multiple
-                    options={allIngredients.filter(el => el.group === 'fruta')}
-                />
-            </Grid>
-            <Grid className={recipe.meal === 'desayuno' && classes.input} item xs={5}>
-                <AutocompleteInput
-                    label="Berries"
-                    value={recipe.berries || []}
-                    onChange={(v) => setRecipe(prev => ({ ...prev, berries: v }))}
-                    required={recipe.meal === 'desayuno'}
-                    getOptionLabel={option => `${option.portion}${option.unit} ${option.name}`}
-                    multiple
-                    options={allIngredients.filter(el => el.group === 'frutos rojos')}
-                />
-            </Grid>
-            <Grid item xs={10}>
-                <AutocompleteInput
-                    label="Condiments"
-                    value={recipe.condiments || []}
-                    onChange={(v) => setRecipe(prev => ({ ...prev, condiments: v }))}
-                    getOptionLabel={option => `${option.portion}${option.unit} ${option.name}`}
-                    multiple
-                    options={allIngredients.filter(el => el.group === 'condimentos')}
-                />
-            </Grid>
-        </Grid>
+        </>}
         <TextInput
             label='Duration (min)'
             value={recipe.duration}
             onChange={(v) => setRecipe(prev => ({ ...prev, duration: v }))}
             required
             type='Number'
-        />
-        <TextInput
-            label="Preparation"
-            value={recipe.preparation}
-            onChange={(v) => setRecipe(prev => ({ ...prev, preparation: v }))}
-            required
-            multiline
         />
         <SelectInput
             label="Utensils"
@@ -192,6 +183,11 @@ const RecipesForm = ({ recipe, setRecipe, error, handleClick, allIngredients, en
             onChange={(v) => setRecipe(prev => ({ ...prev, utensils: v }))}
             required
             options={enums.utensilsEnum}
+        />
+        <Typography align='center' variant='h5' color='primary'>Preparation</Typography>
+        <EditableInput
+            value={recipe.preparation}
+            onChange={(v) => setRecipe(prev => ({ ...prev, preparation: v }))}
         />
         <Button className={classes.button} onClick={handleClick} color="secondary" variant="contained">Save</Button>
     </Paper >

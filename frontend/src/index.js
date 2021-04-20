@@ -11,11 +11,16 @@ import Ingredients from './pages/ingredients/Ingredients'
 import theme from './theme';
 import FeedbackProvider from './contexts/feedback';
 import Recipes from './pages/recipes/Recipes';
-import Menus from './pages/Menus';
+import Menus from './pages/menus/Menus';
 import Patients from './pages/patients/Patients';
 
 import GruposAlimentosRaciones from './pages/patients/GruposAlimentosRaciones';
-import MenuBase from './pages/patients/MenuBase';
+import Plans from './pages/plans/Plans';
+import MenuBase from './pages/plans/MenuBase';
+import RecipeBook from './pages/recipes/RecipeBook';
+import MenuGrid from './pages/menus/MenuGrid';
+import GroceryList from './pages/menus/GroceryList';
+import MealPrep from './pages/menus/MealPrep';
 
 ReactDOM.render(
     <BrowserRouter>
@@ -23,11 +28,16 @@ ReactDOM.render(
             <FeedbackProvider>
                 <ThemeProvider theme={theme}>
                     <App>
-                        <PrivateRoute path='/menu-base/:id' component={MenuBase} />
-                        <PrivateRoute path='/grupos-alimentos-raciones/:id' component={GruposAlimentosRaciones} />
+                        <PrivateRoute path='/meal-prep' component={MealPrep} />
+                        <PrivateRoute path='/grocery-list' component={GroceryList} />
+                        <PrivateRoute path='/menu-grid' component={MenuGrid} />
+                        <PrivateRoute path='/recipe-book' component={RecipeBook} />
+                        <PrivateRoute path='/menu-base' component={MenuBase} />
+                        <PrivateRoute path='/grupos-alimentos-raciones' component={GruposAlimentosRaciones} />
                         <PrivateRoute path='/menus' component={Menus} />
                         <PrivateRoute path='/recipes' component={Recipes} />
                         <PrivateRoute path='/ingredients' component={Ingredients} />
+                        <PrivateRoute path='/plans' component={Plans} />
                         <PrivateRoute path='/patients' component={Patients} />
                         <PublicRoute exact path='/' component={Login} />
                     </App>

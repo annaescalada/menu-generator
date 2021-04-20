@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react'
-import { makeStyles, Paper, Fab, Typography, Snackbar } from '@material-ui/core';
+import { Link } from 'react-router-dom'
+import { makeStyles, Paper, Fab, Typography, Snackbar, Button, Divider } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add'
 import Close from '@material-ui/icons/Close'
 import DeleteIcon from '@material-ui/icons/Delete'
@@ -11,6 +12,8 @@ import { FeedbackContext } from '../../contexts/feedback';
 import Loading from '../../components/shared/Loading';
 import recipesService from '../../services/recipes';
 import RecipesForm from './RecipesForm';
+import { AuthContext } from '../../contexts/auth';
+import SelectInput from '../../components/shared/SelectInput';
 
 const useStyles = makeStyles((theme) => ({
     search: {
@@ -26,20 +29,32 @@ const useStyles = makeStyles((theme) => ({
     },
     deleteIcon: {
         color: 'white'
+    },
+    docButton: {
+        color: theme.palette.primary.main,
+        margin: '1.5em 0 0 0'
     }
 }))
 
 const Recipes = () => {
     const classes = useStyles()
 
+    const defaultRecipe = {
+        name: '',
+        duration: 0,
+        preparation: ''
+    }
+
+    const { selectedRecipes, setSelectedRecipes } = useContext(AuthContext)
     const { message, setMessage } = useContext(FeedbackContext)
 
     const [enums, setEnums] = useState()
     const [allIngredients, setAllIngredients] = useState(false)
-    const [allRecipes, setAllRecipes] = useState(false)
+    const [allRecipes, setAllRecipes] = useState([])
     const [isFormOpen, setIsFormOpen] = useState(false)
-    const [recipe, setRecipe] = useState({})
-
+    const [recipe, setRecipe] = useState(defaultRecipe)
+    
+    console.log(allRecipes)
     const getRecipes = async () => {
         try {
             const { data: { recipes: retrievedRecipes } } = await recipesService.getAllRecipes()
@@ -72,12 +87,13 @@ const Recipes = () => {
     const handleSave = async () => {
         try {
             await recipesService.create(recipe)
-            setRecipe({})
+            setRecipe(defaultRecipe)
             setIsFormOpen(false)
             getRecipes()
 
             setMessage('Recipe created')
         } catch (e) {
+            console.log(e)
             setMessage('Error creating recipe')
         }
     }
@@ -85,7 +101,7 @@ const Recipes = () => {
     const handleEdit = async () => {
         try {
             await recipesService.edit(recipe._id, recipe)
-            setRecipe({})
+            setRecipe(defaultRecipe)
             setIsFormOpen(false)
             getRecipes()
 
@@ -98,7 +114,7 @@ const Recipes = () => {
     const handleDelete = async () => {
         try {
             await recipesService.delete(recipe._id)
-            setRecipe({})
+            setRecipe(defaultRecipe)
             setIsFormOpen(false)
             getRecipes()
 
@@ -120,7 +136,7 @@ const Recipes = () => {
         </div>
         <div className={classes.container}>
             <Fab color="primary" aria-label="add" onClick={() => {
-                setRecipe({});
+                setRecipe(defaultRecipe);
                 setIsFormOpen(!isFormOpen);
             }}>
                 {isFormOpen
@@ -140,6 +156,18 @@ const Recipes = () => {
             allIngredients={allIngredients}
             enums={enums}
         />}
+        <Divider style={{ margin: '3em 0' }} />
+        <Typography align='center' variant='h5' color='primary'>Recipe Book</Typography>
+        <AutocompleteInput
+                value={selectedRecipes || []}
+                onChange={(v) => setSelectedRecipes(v)}
+                multiple
+                getOptionLabel={option => `${option.name}`}
+                options={allRecipes}
+            />
+        <Link className={classes.link} to={`/recipe-book`}>
+            <Button className={classes.docButton} onClick={() => { }} color="primary" variant="outlined">Grupos de alimentos</Button>
+        </Link>
     </> : <Loading />
 }
 

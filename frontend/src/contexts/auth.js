@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import authService from '../services/auth';
 import Loading from '../components/shared/Loading';
+import { config } from '../pages/plans/planConfig'
 
 export const AuthContext = React.createContext();
 
@@ -12,7 +13,12 @@ const AuthProvider = ({ children }) => {
         name: '',
         email: '',
         phone: '',
-        height: ''
+        height: 0
+    })
+    const [selectedPlan, setSelectedPlan] = useState({ distribution: config.defaultPlan })
+    const [selectedRecipes, setSelectedRecipes] = useState([])
+    const [selectedMenu, setSelectedMenu] = useState({
+        name: ''
     })
 
     useEffect(() => {
@@ -46,7 +52,20 @@ const AuthProvider = ({ children }) => {
 
     return <>
         {isLoading ? <Loading /> : (
-            <AuthContext.Provider value={{ user, isLoggedIn, me: getMe, logOut: logMeOut, selectedPatient, setSelectedPatient }}>
+            <AuthContext.Provider value={{
+                user,
+                isLoggedIn,
+                me: getMe,
+                logOut: logMeOut,
+                selectedPatient,
+                setSelectedPatient,
+                selectedPlan,
+                setSelectedPlan,
+                selectedMenu,
+                setSelectedMenu,
+                selectedRecipes,
+                setSelectedRecipes
+            }}>
                 {children}
             </AuthContext.Provider>
         )}

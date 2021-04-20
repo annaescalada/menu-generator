@@ -412,6 +412,22 @@ const seeds = [
         group: 'legumbres',
         portion: 0.5,
         unit: 'tz',
+        tags: ['crudo']
+    },
+    {
+        name: "Garbanzos hervidos",
+        season: ['verano', 'primavera', 'otoño', 'invierno'],
+        group: 'legumbres',
+        portion: 1.5,
+        unit: 'tz',
+        tags: ['cocido'],
+        isComplex: true,
+        ingredients: ["607602bcd7c219f5deb4a5f7"],
+        utensils: [ "olla pressión" ],
+        duration: 50,
+        preparation: "Cocinar en la olla a presión con el doble de la cantidad en agua, durante 40 minutos a presión alta.",
+        unit: "tz",
+        portion: 1.5,
     },
     {
         name: 'Lentejas',
@@ -419,6 +435,22 @@ const seeds = [
         group: 'legumbres',
         portion: 0.5,
         unit: 'tz',
+        tags: ['crudo']
+    },
+    {
+        name: "Lentejas hervidas",
+        season: ['verano', 'primavera', 'otoño', 'invierno'],
+        group: 'legumbres',
+        portion: 1.5,
+        unit: 'tz',
+        tags: ['cocido'],
+        isComplex: true,
+        ingredients: ["607602bcd7c219f5deb4a5f7"],
+        utensils: [ "olla pressión" ],
+        duration: 15,
+        preparation: "Cocinar en la olla a presión con el doble de la cantidad en agua, durante 5 minutos a presión alta.",
+        unit: "tz",
+        portion: 1.5,
     },
     {
         name: 'Lentejas rojas',
@@ -426,6 +458,7 @@ const seeds = [
         group: 'legumbres',
         portion: 0.5,
         unit: 'tz',
+        tags: ['crudo']
     },
     {
         name: 'Judía blanca',
@@ -433,6 +466,22 @@ const seeds = [
         group: 'legumbres',
         portion: 0.5,
         unit: 'tz',
+        tags: ['crudo']
+    },
+    {
+        name: "Judías blancas hervidas",
+        season: ['verano', 'primavera', 'otoño', 'invierno'],
+        group: 'legumbres',
+        portion: 1.5,
+        unit: 'tz',
+        tags: ['cocido'],
+        isComplex: true,
+        ingredients: ["607602bcd7c219f5deb4a5f7"],
+        utensils: [ "olla pressión" ],
+        duration: 50,
+        preparation: "Cocinar en la olla a presión con el doble de la cantidad en agua, durante 40 minutos a presión alta.",
+        unit: "tz",
+        portion: 1.5,
     },
     {
         name: 'Frijoles',
@@ -440,6 +489,22 @@ const seeds = [
         group: 'legumbres',
         portion: 0.5,
         unit: 'tz',
+        tags: ['crudo']
+    },
+    {
+        name: "Frijoles hervidos",
+        season: ['verano', 'primavera', 'otoño', 'invierno'],
+        group: 'legumbres',
+        portion: 1.5,
+        unit: 'tz',
+        tags: ['cocido'],
+        isComplex: true,
+        ingredients: ["607602bcd7c219f5deb4a5f7"],
+        utensils: [ "olla pressión" ],
+        duration: 50,
+        preparation: "Cocinar en la olla a presión con el doble de la cantidad en agua, durante 40 minutos a presión alta.",
+        unit: "tz",
+        portion: 1.5,
     },
     {
         name: 'Guisantes',
@@ -447,6 +512,7 @@ const seeds = [
         group: 'legumbres',
         portion: 1,
         unit: 'tz',
+        tags: ['crudo']
     },
     {
         name: 'Edamames',
@@ -454,6 +520,7 @@ const seeds = [
         group: 'legumbres',
         portion: 1,
         unit: 'tz',
+        tags: ['crudo']
     },
     {
         name: 'Tofu',
@@ -483,13 +550,22 @@ const seeds = [
         group: 'cereales',
         portion: 0.5,
         unit: 'tz',
+        tags: ['crudo']
     },
     {
-        name: 'Arroz basmati',
+        name: "Arroz integral hervido",
         season: ['verano', 'primavera', 'otoño', 'invierno'],
         group: 'cereales',
-        portion: 0.5,
+        portion: 1.5,
         unit: 'tz',
+        tags: ['cocido', 'eliminación'],
+        isComplex: true,
+        ingredients: ["607602bcd7c219f5deb4a5f7"],
+        utensils: [ "olla pressión" ],
+        duration: 30,
+        preparation: "Cocinar en la olla a presión con el doble de la cantidad en agua, durante 20 minutos a presión alta.",
+        unit: "tz",
+        portion: 1.5,
     },
     {
         name: 'Quinoa',
@@ -497,6 +573,22 @@ const seeds = [
         group: 'cereales',
         portion: 0.5,
         unit: 'tz',
+        tags: ['crudo']
+    },
+    {
+        name: "Quinoa hervida",
+        season: ['verano', 'primavera', 'otoño', 'invierno'],
+        group: 'cereales',
+        portion: 1.5,
+        unit: 'tz',
+        tags: ['cocido', 'eliminación'],
+        isComplex: true,
+        ingredients: ["607602bcd7c219f5deb4a5f7"],
+        utensils: [ "olla pressión" ],
+        duration: 15,
+        preparation: "Cocinar en la olla a presión con el doble de la cantidad en agua, durante 5 minutos a presión alta.",
+        unit: "tz",
+        portion: 1.5,
     },
     {
         name: 'Trigo sarraceno',
@@ -504,6 +596,22 @@ const seeds = [
         group: 'cereales',
         portion: 0.5,
         unit: 'tz',
+        tags: ['crudo']
+    },
+    {
+        name: "Trigo sarraceno hervido",
+        season: ['verano', 'primavera', 'otoño', 'invierno'],
+        group: 'cereales',
+        portion: 1.5,
+        unit: 'tz',
+        tags: ['cocido', 'eliminación'],
+        isComplex: true,
+        ingredients: ["607602bcd7c219f5deb4a5f7"],
+        utensils: [ "olla pressión" ],
+        duration: 30,
+        preparation: "Cocinar en la olla a presión con el doble de la cantidad en agua, durante 20 minutos a presión alta.",
+        unit: "tz",
+        portion: 1.5,
     },
     {
         name: 'Mazorcas de maíz',
@@ -534,7 +642,7 @@ const seeds = [
         group: 'cereales',
         portion: 1,
         unit: 'tz',
-        tags: ['semiprocesado', 'gluten']
+        tags: ['semiprocesado', 'gluten', 'crudo']
     },
     {
         name: 'Pan integral (sin gluten)',
@@ -550,7 +658,7 @@ const seeds = [
         group: 'cereales',
         portion: 1,
         unit: 'tz',
-        tags: ['semiprocesado']
+        tags: ['semiprocesado', 'crudo']
     },
     {
         name: 'Fideos de arroz',
@@ -567,6 +675,7 @@ const seeds = [
         group: 'tubérculos',
         portion: 2,
         unit: 'U',
+        tags: ['eliminación']
     },
     {
         name: 'Boniato',
@@ -574,6 +683,7 @@ const seeds = [
         group: 'tubérculos',
         portion: 1,
         unit: 'U',
+        tags: ['eliminación']
     },
     //crucíferas
     {
@@ -603,6 +713,7 @@ const seeds = [
         group: 'crucíferas',
         portion: 0.5,
         unit: 'tz',
+        tags: ['eliminación']
     },
     {
         name: 'Col lombarda',
@@ -639,6 +750,7 @@ const seeds = [
         group: 'hortalizas',
         portion: 1,
         unit: 'tz',
+        tags: ['eliminación']
     },
     {
         name: 'Endivia',
@@ -660,6 +772,7 @@ const seeds = [
         group: 'hortalizas',
         portion: 1,
         unit: 'tz',
+        tags: ['eliminación']
     },
     {
         name: 'Lechuga',
@@ -682,6 +795,7 @@ const seeds = [
         group: 'otras verduras',
         portion: 1,
         unit: 'U',
+        tags: ['eliminación']
     },
     {
         name: 'Apio',
@@ -689,6 +803,7 @@ const seeds = [
         group: 'otras verduras',
         portion: 0.5,
         unit: 'tz',
+        tags: ['eliminación']
     },
     {
         name: 'Berenjena',
@@ -703,6 +818,7 @@ const seeds = [
         group: 'otras verduras',
         portion: 1,
         unit: 'tz',
+        tags: ['eliminación']
     },
     {
         name: 'Cebolla',
@@ -717,6 +833,7 @@ const seeds = [
         group: 'otras verduras',
         portion: 0.5,
         unit: 'tz',
+        tags: ['eliminación']
     },
     {
         name: 'Judía verde',
@@ -724,6 +841,7 @@ const seeds = [
         group: 'otras verduras',
         portion: 0.5,
         unit: 'tz',
+        tags: ['eliminación']
     },
     {
         name: 'Pepino',
@@ -780,6 +898,7 @@ const seeds = [
         group: 'otras verduras',
         portion: 0.5,
         unit: 'tz',
+        tags: ['eliminación']
     },
     {
         name: 'Zanahoria',
@@ -823,6 +942,7 @@ const seeds = [
         group: 'frutas',
         portion: 1,
         unit: 'U',
+        tags: ['eliminación']
     },
     {
         name: 'Pera',
@@ -860,6 +980,14 @@ const seeds = [
         unit: 'tz',
     },
     {
+        name: 'Papaya',
+        season: ['verano', 'primavera', 'otoño', 'invierno'],
+        group: 'frutas',
+        portion: 1,
+        unit: 'tz',
+        tags: ['eliminación']
+    },
+    {
         name: 'Mango',
         season: ['verano', 'primavera', 'otoño', 'invierno'],
         group: 'frutas',
@@ -879,6 +1007,7 @@ const seeds = [
         group: 'frutas',
         portion: 1,
         unit: 'U',
+        tags: ['eliminación']
     },
     {
         name: 'Plátano congelado',
@@ -971,6 +1100,7 @@ const seeds = [
         group: 'frutos rojos',
         portion: 0.5,
         unit: 'tz',
+        tags: ['eliminación']
     },
     {
         name: 'Granada',

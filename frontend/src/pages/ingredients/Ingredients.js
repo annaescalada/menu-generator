@@ -31,12 +31,17 @@ const useStyles = makeStyles((theme) => ({
 const Ingredients = () => {
   const classes = useStyles()
 
+  const ingredientDefault = {
+    name: '',
+    portion: 0
+  }
+
   const { message, setMessage } = useContext(FeedbackContext)
 
   const [enums, setEnums] = useState()
   const [allIngredients, setAllIngredients] = useState(false)
   const [isFormOpen, setIsFormOpen] = useState(false)
-  const [ingredient, setIngredient] = useState({})
+  const [ingredient, setIngredient] = useState(ingredientDefault)
 
   const getData = async () => {
     try {
@@ -59,7 +64,7 @@ const Ingredients = () => {
   const handleSave = async () => {
     try {
       await ingredientsService.create(ingredient)
-      setIngredient({})
+      setIngredient()
       setIsFormOpen(false)
       getData()
 
@@ -72,7 +77,7 @@ const Ingredients = () => {
   const handleEdit = async () => {
     try {
       await ingredientsService.edit(ingredient._id, ingredient)
-      setIngredient({})
+      setIngredient(ingredientDefault)
       setIsFormOpen(false)
       getData()
 
@@ -85,7 +90,7 @@ const Ingredients = () => {
   const handleDelete = async () => {
     try {
       await ingredientsService.delete(ingredient._id)
-      setIngredient({})
+      setIngredient(ingredientDefault)
       setIsFormOpen(false)
       getData()
 
@@ -107,7 +112,7 @@ const Ingredients = () => {
     </div>
     <div className={classes.container}>
       <Fab color="primary" aria-label="add" onClick={() => {
-        setIngredient({});
+        setIngredient(ingredientDefault);
         setIsFormOpen(!isFormOpen);
       }}>
         {isFormOpen

@@ -2,6 +2,7 @@ const express = require('express')
 const Recipe = require('../models/recipe')
 const router = new express.Router()
 const auth = require('../middlewares/auth')
+const { portionDistributionGroups } = require('../bin/enums')
 require('dotenv').config();
 
 router.post('/recipe', auth, async (req, res) => {
@@ -49,7 +50,7 @@ router.patch('/recipe/:id', auth, async (req, res) => {
 router.get('/recipes', auth, async (req, res) => {
     try {
         const recipes = await Recipe.find()
-            // .populate('carbs proteins fats')
+            .populate([...portionDistributionGroups, 'condiments'].join(' '))
 
         for (let recipe of recipes) {
             recipe.season = []

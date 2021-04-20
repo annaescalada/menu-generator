@@ -40,8 +40,17 @@ const IngredientsForm = ({ ingredient, setIngredient, error, handleClick, allIng
             ...prev,
             ingredients: v,
             season: _.intersection(...v.map(ingredient => ingredient.season)),
-            tags: _.union(...v.map(ingredient => ingredient.tags))
+            tags: getTags(v)
         }))
+    }
+
+    const getTags = (ingredients) => {
+        const ingredientTags = ingredients.map(ingredient => ingredient.tags)
+
+        const ingredientExclusiveTags = ingredientTags.map(ingredientTag => ingredientTag.filter(tag => enums.exclusiveTags.includes(tag)))
+
+        return [..._.union(...ingredientExclusiveTags),
+        ..._.intersection(...ingredientTags, enums.inclusiveTags)]
     }
 
     return <Paper className={classes.container}>
@@ -91,8 +100,7 @@ const IngredientsForm = ({ ingredient, setIngredient, error, handleClick, allIng
             value={ingredient.tags || []}
             onChange={(v) => setIngredient(prev => ({ ...prev, tags: v }))}
             required
-            options={enums.tagEnum}
-            disabled={ingredient.isComplex}
+            options={[...enums.inclusiveTags, ...enums.exclusiveTags]}
             error={error && !ingredient.tags}
         />
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>

@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react'
-import { makeStyles, Typography, Accordion, AccordionSummary, AccordionDetails, Fab, Paper, Button, Grid } from '@material-ui/core'
+import { makeStyles, Typography, Accordion, AccordionSummary, AccordionDetails, Fab, Paper, Button, Grid, Chip } from '@material-ui/core'
 import BasicTable from '../../components/shared/BasicTable'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import AssessmentIcon from '@material-ui/icons/Assessment'
@@ -39,7 +39,13 @@ const useStyles = makeStyles((theme) => ({
     },
     deleteIcon: {
         color: 'white'
-    }
+    },
+    chip: {
+        margin: '1em',
+        color: 'white',
+        padding: '0.5em',
+        maxWidth: 'fit-content'
+    },
 }))
 
 const ChecksForm = ({ patient = {}, setPatient }) => {
@@ -128,6 +134,11 @@ const ChecksForm = ({ patient = {}, setPatient }) => {
         { label: '', key: 'delete' }
     ]
 
+    const idealWeightRange = {
+        min: (18.5 * ((patient.height * patient.height) / 10000)).toFixed(2),
+        max: (24.9 * ((patient.height * patient.height) / 10000)).toFixed(2),
+    }
+
     return <Accordion className={classes.expand}>
         <AccordionSummary
             className={classes.panel}
@@ -135,8 +146,10 @@ const ChecksForm = ({ patient = {}, setPatient }) => {
         >
             <AssessmentIcon className={classes.icon} />
             <Typography variant='body1'>Checks</Typography>
+
         </AccordionSummary>
         <AccordionDetails className={classes.content}>
+            <Chip className={classes.chip} label={`Ìdeal weight range: ${idealWeightRange.min}kg - ${idealWeightRange.max}kg`} color='primary' />
             <BasicTable rows={rows} values={values} />
             <Fab className={classes.add} size='medium' color="primary" aria-label="add" onClick={() => {
                 setIsFormOpen(!isFormOpen); setCheck({ patient: patient._id })

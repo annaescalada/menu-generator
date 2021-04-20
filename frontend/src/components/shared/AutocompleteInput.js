@@ -2,10 +2,10 @@ import React from 'react'
 import { Autocomplete } from '@material-ui/lab'
 import { TextField } from '@material-ui/core';
 
-const AutocompleteInput = ({ label, value, onChange, options, getOptionLabel, multiple, variant = "standard", ...props }) => <div style={{ width: 'auto', margin: '1em' }}>
+const AutocompleteInput = ({ label, value, inputValue, onChange, options, getOptionLabel, multiple, variant = "standard", ...props }) => <div style={{ width: 'auto', margin: '1em' }}>
     <Autocomplete
         value={value}
-        inputValue={value}
+        inputValue={inputValue}
         onChange={(e, v) => onChange(v)}
         options={options}
         multiple={multiple}

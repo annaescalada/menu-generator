@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react'
-import { makeStyles, Paper, Fab, Typography, Snackbar } from '@material-ui/core';
+import { makeStyles, Fab, Typography, Snackbar } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add'
 import Close from '@material-ui/icons/Close'
 import DeleteIcon from '@material-ui/icons/Delete'
@@ -33,8 +33,10 @@ const useStyles = makeStyles((theme) => ({
 const Patients = () => {
     const classes = useStyles()
 
-    const { selectedPatient: patient, setSelectedPatient: setPatient } = useContext(AuthContext)
+    const { selectedPlan, selectedPatient: patient, setSelectedPatient: setPatient } = useContext(AuthContext)
     const { message, setMessage } = useContext(FeedbackContext)
+
+    console.log('selectedPlan', selectedPlan)
 
     const [enums, setEnums] = useState()
     const [isFormOpen, setIsFormOpen] = useState(patient._id)
@@ -42,12 +44,13 @@ const Patients = () => {
 
     const getPatient = async (id) => {
         try {
-            if (!id) setPatient({
+            if (!id) return setPatient({
                 name: '',
                 email: '',
                 phone: '',
                 height: ''
             })
+
             const { data: { patient: retrievedPatient } } = await patientService.getPatient(id)
             setPatient({
                 ...retrievedPatient,
@@ -130,8 +133,9 @@ const Patients = () => {
                 getOptionLabel={option => `${option.name}`}
                 options={allPatients}
                 variant='outlined'
-                getOptionSelected={(option, value) => option ?.name === patient.name}
-                value={patient.name}
+            // getOptionSelected={(option, value) => option ?.name === patient ?.name}
+            // value={patient ?.name || ''}
+            // inputValue={patient ?.name || ''}
             />
         </div>
         <div className={classes.container}>
@@ -153,6 +157,7 @@ const Patients = () => {
             handleClick={patient._id ? handleEdit : handleSave}
             error={message}
             enums={enums}
+
         />}
     </> : <Loading />
 }

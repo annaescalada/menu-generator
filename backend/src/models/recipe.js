@@ -1,18 +1,27 @@
 const mongoose = require('mongoose')
-const { mealEnum, utensilsEnum } = require('../bin/enums') 
+const { mealEnum, utensilsEnum, seasonEnum , recipeGroups, exclusiveTags, inclusiveTags } = require('../bin/enums') 
+const _ = require('lodash')
 
 const recipeSchema = new mongoose.Schema({
     name: {
         type: String,
         unique: true,
         trim: true,
-        lowercase: true,
         required: true,
     },
     meal: {
         type: String,
         enum: mealEnum
     },
+    // season: [{
+    //     type: String,
+    //     enum: seasonEnum,
+    //     required: true,
+    // }],
+    tags: [{
+        type: String,
+        enum: [...inclusiveTags, ...exclusiveTags]
+    }],
     carbs: {
         type: [mongoose.Schema.Types.ObjectId],
         ref: 'Ingredient',
@@ -89,6 +98,20 @@ const recipeSchema = new mongoose.Schema({
         required: true
     },
 })
+
+// recipeSchema.methods.toJSON = function () {
+//     try {
+//         const recipeObject = this.toObject()
+    
+//         recipeObject.season = _.intersection(...recipeGroups
+//             .map(key => _.intersection(...recipeObject[key] && recipeObject[key].map(ingredient => ingredient.season) || [] ))
+//             .filter(el => el.length))
+    
+//         return recipeObject
+//     } catch(e) {
+//         console.log(e)
+//     }
+// }
 
 const Recipe = mongoose.model('Recipe', recipeSchema)
 

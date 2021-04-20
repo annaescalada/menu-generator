@@ -4,17 +4,10 @@ import _ from 'lodash'
 import moment from 'moment'
 import TextInput from '../../components/shared/TextInput'
 import SelectInput from '../../components/shared/SelectInput'
-import AutocompleteInput from '../../components/shared/AutocompleteInput'
 import DateInput from '../../components/shared/DateInput';
-import { isToday } from 'date-fns';
-import BasicTable from '../../components/shared/BasicTable';
 import ChecksForm from './CheckForm'
-import { Editor, EditorState } from 'draft-js';
 import EditableInput from '../../components/shared/EditableInput'
 import { Link } from 'react-router-dom'
-import PortionDistribution from './PortionDistribution';
-
-
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -36,10 +29,10 @@ const useStyles = makeStyles((theme) => ({
         maxWidth: 'fit-content'
     },
     link: {
-        margin:'1em',
         textDecoration: 'none',
         display: 'flex',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        color: theme.palette.primary.main,
     },
     docButton: {
         color: theme.palette.primary.main,
@@ -47,10 +40,11 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
-const PatientsForm = ({ patient, setPatient, error, handleClick, enums }) => {
+const PatientsForm = ({ patient, setPatient, error, handleClick, enums, allPatients }) => {
     const classes = useStyles()
+
     return <Paper className={classes.container}>
-        <Typography align='center' variant='h6' color='primary'>Contact Data</Typography>
+        <Typography align='center' variant='h5' color='primary'>Contact Data</Typography>
         <Chip className={classes.chip} label={moment(patient.created_at).format('DD/mm/yy')} color='primary' />
         <TextInput
             label="Name"
@@ -82,12 +76,12 @@ const PatientsForm = ({ patient, setPatient, error, handleClick, enums }) => {
             {!patient._id && <Button className={classes.button} onClick={handleClick} color="secondary" variant="contained">Create patient</Button>}
         </Grid>
         <Divider style={{ margin: '3em 0' }} />
-        <Typography align='center' variant='h6' color='primary'>Antropometric Data</Typography>
+        <Typography align='center' variant='h5' color='primary'>Antropometric Data</Typography>
         <Grid container justify='center' alignItems='center' wrap>
             <Grid item xs={4}>
                 <DateInput
                     label="Date of birth"
-                    value={patient.dateOfBirth}
+                    value={moment(patient.dateOfBirth)}
                     onChange={(v) => setPatient(prev => ({
                         ...prev,
                         dateOfBirth: v,
@@ -101,7 +95,7 @@ const PatientsForm = ({ patient, setPatient, error, handleClick, enums }) => {
             <Grid item xs={3}>
                 <SelectInput
                     label="Gender"
-                    value={patient.gender}
+                    value={patient.gender || ''}
                     onChange={(v) => setPatient(prev => ({ ...prev, gender: v }))}
                     options={enums.genderEnum}
                 />
@@ -109,7 +103,7 @@ const PatientsForm = ({ patient, setPatient, error, handleClick, enums }) => {
             <Grid item xs={3}>
                 <TextInput
                     label="Height (cm)"
-                    value={patient.height}
+                    value={patient.height || ''}
                     onChange={(v) => setPatient(prev => ({ ...prev, height: v }))}
                     type='number'
                 />
@@ -117,18 +111,21 @@ const PatientsForm = ({ patient, setPatient, error, handleClick, enums }) => {
             {patient._id && <ChecksForm patient={patient} setPatient={setPatient} />}
         </Grid>
         <Divider style={{ margin: '3em 0' }} />
-        <Typography align='center' variant='h6' color='primary'>Menu Configuration</Typography>
+        <Typography align='center' variant='h5' color='primary'>Menu Configuration</Typography>
         <SelectInput
-            label="Tags (to exclude in menu)"
+            label={`Tags to include`}
             multiple
-            value={patient.tags || []}
-            onChange={(v) => setPatient(prev => ({ ...prev, tags: v }))}
-            options={enums.tagEnum}
-            disabled={patient.isComplex}
+            value={patient.toIncludeTags || []}
+            onChange={(v) => setPatient(prev => ({ ...prev, toIncludeTags: v }))}
+            options={[...enums.inclusiveTags, ...enums.exclusiveTags]}
         />
-        <Link className={classes.link} to={`/grupos-alimentos-raciones/${patient._id}`}>
-            <Button className={classes.docButton} onClick={() => { }} color="primary" variant="outlined">Grupos de alimentos y raciones</Button>
-        </Link>
+        <SelectInput
+            label={`Tags to exclude`}
+            multiple
+            value={patient.toExcludeTags || []}
+            onChange={(v) => setPatient(prev => ({ ...prev, toExcludeTags: v }))}
+            options={[...enums.inclusiveTags, ...enums.exclusiveTags]}
+        />
         <SelectInput
             label="Utensils"
             multiple
@@ -136,19 +133,15 @@ const PatientsForm = ({ patient, setPatient, error, handleClick, enums }) => {
             onChange={(v) => setPatient(prev => ({ ...prev, utensils: v }))}
             options={enums.utensilsEnum}
         />
-        <SelectInput
-            label="Preparation days"
-            multiple
-            value={patient.preparationDays || []}
-            onChange={(v) => setPatient(prev => ({ ...prev, preparationDays: v }))}
-            options={enums.daysEnum}
-        />
-        <PortionDistribution patient={patient} setPatient={setPatient} handleClick={handleClick}/>
-        <Link className={classes.link} to={`/menu-base/${patient._id}`}>
-            <Button className={classes.docButton} onClick={() => { }} color="primary" variant="outlined">Menu básico</Button>
-        </Link>
+        <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+            <Link className={classes.link} to={`/grupos-alimentos-raciones`}>
+                <Button className={classes.docButton} onClick={() => { }} color="primary" variant="outlined">Grupos de alimentos</Button>
+            </Link>
+            <Button className={classes.docButton} onClick={() => { }} color="primary" variant="outlined"><a target='_blank' className={classes.link} href='https://drive.google.com/file/d/1sMom1Z0zmF4qoqK9F8BMy_e466vQ8Bu8/view?usp=sharing'>My Plate Desayuno</a></Button>
+            <Button className={classes.docButton} onClick={() => { }} color="primary" variant="outlined"><a target='_blank' className={classes.link} href='https://drive.google.com/file/d/1nXAmLnhwuuBh5JV2Mp-Ki8EdF-dgYc_6/view?usp=sharing'>My Plate Comida</a></Button>
+        </div>
         <Divider style={{ margin: '3em 0' }} />
-        <Typography align='center' variant='h6' color='primary'>History</Typography>
+        <Typography align='center' variant='h5' color='primary'>History</Typography>
         <EditableInput
             value={patient.history || ''}
             onChange={(v) => setPatient(prev => ({ ...prev, history: v }))}

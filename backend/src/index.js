@@ -7,6 +7,8 @@ const userRouter = require('./controllers/user')
 const ingredientRouter = require('./controllers/ingredient')
 const recipesRouter = require('./controllers/recipe')
 const patientRouter = require('./controllers/patient')
+const planRouter = require('./controllers/plan')
+const menuRouter = require('./controllers/menu')
 const sharedRouter = require('./controllers/shared')
 
 const app = express()
@@ -20,6 +22,8 @@ app.use(userRouter)
 app.use(ingredientRouter)
 app.use(recipesRouter)
 app.use(patientRouter)
+app.use(planRouter)
+app.use(menuRouter)
 app.use(sharedRouter)
 
 app.listen(port, ()=> {

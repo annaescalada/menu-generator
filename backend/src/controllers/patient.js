@@ -27,6 +27,7 @@ router.patch('/patient/:id', auth, async (req, res) => {
 
         updates.forEach(update => patient[update] = req.body[update])
 
+
         await patient.save()
 
         res.status(200).send({ patient })
@@ -53,7 +54,6 @@ router.get('/patient/:id', auth, async (req, res) => {
 
         res.status(200).send({ patient })
     } catch (e) {
-        console.log(e)
         res.status(400).send(e)
     }
 })
@@ -110,7 +110,6 @@ router.delete('/patient/check/:id', auth, async (req, res) => {
 
         res.send(check)
     } catch (e) {
-         console.log(e)
         res.status(500).send()
     }
 })
