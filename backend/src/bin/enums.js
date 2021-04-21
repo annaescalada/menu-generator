@@ -36,7 +36,7 @@ module.exports = {
         'omega3',
         'fruit',
         'berries',
-        'condiment'
+        'condiments'
     ],
     portionDistributionGroups: [
         'carbs',

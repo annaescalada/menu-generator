@@ -43,25 +43,36 @@ const useStyles = makeStyles((theme) => ({
 const RecipesForm = ({ recipe, setRecipe, error, handleClick, allIngredients, enums }) => {
     const classes = useStyles()
 
-    const getSeasons = () => _.intersection(...enums.recipeGroups
-        .map(key => _.intersection(...recipe[key] ?.map(ingredient => ingredient.season) || [] ))
-        .filter(el => el.length))
+    const getSeasons = () => {
+        const getIngredientSeasons = (ingredients) => {
+            const ingredientSeason = ingredients ?.map(ingredient => ingredient.season)
+    
+            return _.intersection(...ingredientSeason)
+        }
+
+        const ingredientsByGroup = enums.recipeGroups ?.map(group => recipe[group]).filter(el => el.length)
+
+        const seasonsByGroup = ingredientsByGroup ?.map(group => getIngredientSeasons(group))
+
+        return _.intersection(...seasonsByGroup)
+    }
 
     const getTags = () => {
-        const ingredientsByGroup = enums.recipeGroups.map(group => recipe[group])
-        return _.union(...ingredientsByGroup).length ? getIngredientTags(_.union(...ingredientsByGroup)) : []
+        const getIngredientTags = (ingredients, type) => {
+            const ingredientTags = ingredients.map(ingredient => ingredient.tags)
+
+            return type === 'exclusive'
+                ? _.union(...ingredientTags.map(ingredientTag => ingredientTag.filter(tag => enums.exclusiveTags.includes(tag))))
+                :_.intersection(...ingredientTags, enums.inclusiveTags)
+        }
+
+        const ingredientsByGroup = enums.recipeGroups.map(group => recipe[group]).filter(el => el.length)
+
+        const inclusiveTagsByGroup = ingredientsByGroup ?.map(group => getIngredientTags(group, 'inclusive'))
+        const exclusiveTagsByGroups = ingredientsByGroup ?.map(group => getIngredientTags(group, 'exclusive'))
+
+        return ingredientsByGroup.length && [ ..._.union(...exclusiveTagsByGroups), ..._.intersection(...inclusiveTagsByGroup, enums.inclusiveTags)]
     }
-
-    const getIngredientTags = (ingredients) => {
-        const ingredientTags = ingredients.map(ingredient => ingredient.tags)
-
-        const ingredientExclusiveTags = ingredientTags.map(ingredientTag => ingredientTag.filter(tag => enums.exclusiveTags.includes(tag)))
-
-        return [..._.union(...ingredientExclusiveTags),
-        ..._.intersection(...ingredientTags, enums.inclusiveTags)]
-    }
-
-    console.log(allIngredients.filter(el => ['condimentos'].includes(el.group)))
 
     useEffect(() => {
         setRecipe(prev => ({
@@ -86,6 +97,11 @@ const RecipesForm = ({ recipe, setRecipe, error, handleClick, allIngredients, en
             required
             options={enums.mealEnum}
             error={error && !recipe.meal}
+        />
+        <TextInput
+            label="Image"
+            value={recipe.image}
+            onChange={(v) => setRecipe(prev => ({ ...prev, image: v }))}
         />
         <SelectInput
             label={`Tags`}

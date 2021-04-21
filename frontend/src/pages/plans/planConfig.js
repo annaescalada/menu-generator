@@ -132,5 +132,61 @@ export const config = {
             berries: 0,
             text: ''
         },
-    ]
+    ],
+    keyIconLabel : [{
+        icon: 'cereales',
+        key: 'carbs',
+        label: 'Carbohidratos',
+    },
+    {
+        icon: 'legumbres',
+        key: 'proteins',
+        label: 'Proteínas',
+    },
+    {
+        icon: 'hortalizas',
+        label: 'Vegetales',
+        key: 'greens',
+    },
+    {
+        icon: 'otras_verduras',
+        label: 'Otras Verduras',
+        key: 'otherVeggies',
+    },
+    {
+        icon: 'crucíferas',
+        label: 'Cruciferas',
+        key: 'otherVeggies',
+    },
+    {
+        icon: 'frutos_secos_y_oleaginosos',
+        label: 'Grasas saludables',
+        key: 'fats',
+    },
+    {
+        icon: 'lácteos',
+        label: 'Lácteos',
+        key: 'dairy',
+    },
+    {
+        icon: 'omega_3',
+        label: 'Omega 3',
+        key: 'omega3',
+    },
+    {
+        icon: 'frutas',
+        label: 'Frutas',
+        key: 'fruits',
+    },
+    {
+        icon: 'frutos_rojos',
+        label: 'Frutos rojos',
+        key: 'berries',
+    },
+    {
+        icon: 'condimentos',
+        label: 'Condimentos',
+        key: 'condiments',
+    },
+]
 }

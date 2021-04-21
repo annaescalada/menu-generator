@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
 const Header = (props) => {
     const path = props.history.location.pathname
 
-    const isHidden = ['/grupos-alimentos-raciones', 'menu-base', 'recipe-group', 'menu-grid', 'grocery-list', 'meal-prep'].some(route => path.includes(route))
+    const isHidden = ['/grupos-alimentos-raciones', 'menu-base', 'recipe-book', 'menu-grid', 'grocery-list', 'meal-prep'].some(route => path.includes(route))
     // const isHidden = false
 
     const classes = useStyles()

@@ -13,11 +13,9 @@ const recipeSchema = new mongoose.Schema({
         type: String,
         enum: mealEnum
     },
-    // season: [{
-    //     type: String,
-    //     enum: seasonEnum,
-    //     required: true,
-    // }],
+    image: {
+        type: String,
+    },
     tags: [{
         type: String,
         enum: [...inclusiveTags, ...exclusiveTags]

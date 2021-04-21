@@ -3,6 +3,7 @@ import { makeStyles, Typography, Paper, Grid } from '@material-ui/core';
 import { AuthContext } from '../../contexts/auth'
 import ErrorIcon from '@material-ui/icons/Error';
 import moment from 'moment'
+import { config } from './planConfig'
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -56,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
     recomName: {
         display: 'flex',
         justifyContent: 'center',
-        alignItems:'center',
+        alignItems: 'center',
         marginBottom: '1em'
     },
     legend: {
@@ -79,58 +80,8 @@ const MenuBase = () => {
 
     const { selectedPlan: plan, selectedPatient: patient } = useContext(AuthContext)
 
-    const keyIconLabel = [{
-        icon: 'cereales',
-        key: 'carbs',
-        label: 'Carbohidratos',
-    },
-    {
-        icon: 'legumbres',
-        key: 'proteins',
-        label: 'Proteínas',
-    },
-    {
-        icon: 'hortalizas',
-        label: 'Vegetales',
-        key: 'greens',
-    },
-    {
-        icon: 'otras_verduras',
-        label: 'Otras Verduras',
-        key: 'otherVeggies',
-    },
-    {
-        icon: 'crucíferas',
-        label: 'Cruciferas',
-        key: 'otherVeggies',
-    },
-    {
-        icon: 'frutos_secos_y_oleaginosos',
-        label: 'Grasas saludables',
-        key: 'fats',
-    },
-    {
-        icon: 'lácteos',
-        label: 'Lácteos',
-        key: 'dairy',
-    },
-    {
-        icon: 'omega_3',
-        label: 'Omega 3',
-        key: 'omega3',
-    },
-    {
-        icon: 'frutas',
-        label: 'Frutas',
-        key: 'fruits',
-    },
-    {
-        icon: 'frutos_rojos',
-        label: 'Frutos rojos',
-        key: 'berries',
-    }]
-
-
+    const { keyIconLabel } = config
+    
     return <>
         <div className={classes.container}>
             <Typography variant='h4' color='primary'>Pauta nutricional</Typography>

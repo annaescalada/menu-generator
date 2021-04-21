@@ -54,7 +54,6 @@ const Recipes = () => {
     const [isFormOpen, setIsFormOpen] = useState(false)
     const [recipe, setRecipe] = useState(defaultRecipe)
     
-    console.log(allRecipes)
     const getRecipes = async () => {
         try {
             const { data: { recipes: retrievedRecipes } } = await recipesService.getAllRecipes()
@@ -90,6 +89,7 @@ const Recipes = () => {
             setRecipe(defaultRecipe)
             setIsFormOpen(false)
             getRecipes()
+            setSelectedRecipes([])
 
             setMessage('Recipe created')
         } catch (e) {
@@ -104,6 +104,7 @@ const Recipes = () => {
             setRecipe(defaultRecipe)
             setIsFormOpen(false)
             getRecipes()
+            setSelectedRecipes([])
 
             setMessage('Recipe updated')
         } catch (e) {
@@ -117,6 +118,7 @@ const Recipes = () => {
             setRecipe(defaultRecipe)
             setIsFormOpen(false)
             getRecipes()
+            setSelectedRecipes([])
 
             setMessage('Recipe deleted')
         } catch (e) {
