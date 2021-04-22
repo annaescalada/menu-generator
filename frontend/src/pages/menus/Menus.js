@@ -11,6 +11,8 @@ import Loading from '../../components/shared/Loading';
 import menuService from '../../services/menu';
 import { AuthContext } from '../../contexts/auth';
 import MenuForm from './MenuForm';
+import ingredientsService from '../../services/ingredients';
+import recipesService from '../../services/recipes';
 
 const useStyles = makeStyles((theme) => ({
     search: {
@@ -40,6 +42,8 @@ const Menus = () => {
     const [enums, setEnums] = useState()
     const [isFormOpen, setIsFormOpen] = useState(menu._id)
     const [allMenus, setAllMenus] = useState()
+    const [allIngredients, setAllIngredients] = useState()
+    const [allRecipes, setAllRecipes] = useState()
 
     const getAllMenus = async () => {
         try {
@@ -54,6 +58,12 @@ const Menus = () => {
         try {
             const { data: { enums: retrievedEnums } } = await sharedService.getEnums()
             setEnums(retrievedEnums)
+
+            const { data: { ingredients: retrievedIngredients } } = await ingredientsService.getAllIngredients()
+            setAllIngredients(retrievedIngredients)
+
+            const { data: { recipes: retrievedRecipes } } = await recipesService.getAllRecipes()
+            setAllRecipes(retrievedRecipes)
 
             getAllMenus()
         } catch (e) {
@@ -134,7 +144,8 @@ const Menus = () => {
             handleClick={menu._id ? handleEdit : handleSave}
             error={message}
             enums={enums}
-
+            allIngredients={allIngredients}
+            allRecipes={allRecipes}
         />}
     </> : <Loading />
 }

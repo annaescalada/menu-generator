@@ -50,12 +50,7 @@ router.patch('/recipe/:id', auth, async (req, res) => {
 router.get('/recipes', auth, async (req, res) => {
     try {
         const recipes = await Recipe.find()
-            .populate(recipeGroups.join(' '))
-
-        for (let recipe of recipes) {
-            recipe.season = []
-            recipe.tags = []
-        }
+            .populate('ingredients')
 
         res.status(200).send({ recipes })
     } catch (e) {

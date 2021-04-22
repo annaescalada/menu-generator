@@ -4,6 +4,7 @@ import _ from 'lodash'
 import TextInput from '../../components/shared/TextInput'
 import SelectInput from '../../components/shared/SelectInput'
 import AutocompleteInput from '../../components/shared/AutocompleteInput'
+import EditableInput from '../../components/shared/EditableInput';
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -45,12 +46,13 @@ const IngredientsForm = ({ ingredient, setIngredient, error, handleClick, allIng
     }
 
     const getTags = (ingredients) => {
-        const ingredientTags = ingredients.map(ingredient => ingredient.tags)
+        const ingredientTags = ingredients ?.map(ingredient => ingredient.tags) || []
 
-        const ingredientExclusiveTags = ingredientTags.map(ingredientTag => ingredientTag.filter(tag => enums.exclusiveTags.includes(tag)))
+        const exclusiveTags = _.union(...ingredientTags.map(ingredientTag => ingredientTag.filter(tag => enums.exclusiveTags.includes(tag))))
 
-        return [..._.union(...ingredientExclusiveTags),
-        ..._.intersection(...ingredientTags, enums.inclusiveTags)]
+        const inclusiveTags = ingredientTags.length ? _.intersection(...ingredientTags, enums.inclusiveTags) : []
+
+        return [...exclusiveTags, ...inclusiveTags]
     }
 
     return <Paper className={classes.container}>
@@ -60,6 +62,16 @@ const IngredientsForm = ({ ingredient, setIngredient, error, handleClick, allIng
             onChange={(v) => setIngredient(prev => ({ ...prev, name: v }))}
             required
             error={error && !ingredient.name}
+        />
+        <TextInput
+            label="Image"
+            value={ingredient.image}
+            onChange={(v) => setIngredient(prev => ({ ...prev, image: v }))}
+        />
+        <TextInput
+            label="Link"
+            value={ingredient.link}
+            onChange={(v) => setIngredient(prev => ({ ...prev, link: v }))}
         />
         <SelectInput
             label="Season"
@@ -113,6 +125,13 @@ const IngredientsForm = ({ ingredient, setIngredient, error, handleClick, allIng
         </div >
         {ingredient.isComplex && <>
             <TextInput
+                label='Portion Amount'
+                value={ingredient.portionAmount}
+                onChange={(v) => setIngredient(prev => ({ ...prev, portionAmount: v }))}
+                required
+                type='Number'
+            />
+            <TextInput
                 label='Duration (min)'
                 value={ingredient.duration}
                 onChange={(v) => setIngredient(prev => ({ ...prev, duration: v }))}
@@ -128,12 +147,9 @@ const IngredientsForm = ({ ingredient, setIngredient, error, handleClick, allIng
                 multiple
                 options={allIngredients}
             />
-            <TextInput
-                label="Preparation"
+            <EditableInput
                 value={ingredient.preparation}
                 onChange={(v) => setIngredient(prev => ({ ...prev, preparation: v }))}
-                required
-                multiline
             />
             <SelectInput
                 label="Utensils"

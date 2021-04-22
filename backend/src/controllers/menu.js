@@ -36,7 +36,7 @@ router.patch('/menu/:id', auth, async (req, res) => {
 
 router.get('/menus', auth, async (req, res) => {
     try {
-        const menus = await Menu.find()
+        const menus = await Menu.find().populate('content.recipe content.basic.ingredients')
 
         res.status(200).send({ menus })
     } catch (e) {

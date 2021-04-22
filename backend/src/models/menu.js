@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const { groupEnum, seasonEnum, portionEnum, exclusiveTags, inclusiveTags, utensilsEnum } = require('../bin/enums') 
+const { groupEnum, seasonEnum, portionEnum, exclusiveTags, inclusiveTags, utensilsEnum } = require('../bin/enums')
 
 const menuSchema = new mongoose.Schema({
     name: {
@@ -13,10 +13,13 @@ const menuSchema = new mongoose.Schema({
         enum: seasonEnum,
         required: true,
     }],
-    tags: [{
+    toExcludeTags: [{
         type: String,
-        enum: [...exclusiveTags, ...inclusiveTags],
-        required: true,
+        enum: [...inclusiveTags, ...exclusiveTags]
+    }],
+    toIncludeTags: [{
+        type: String,
+        enum: [...inclusiveTags, ...exclusiveTags]
     }],
     utensils: {
         type: [{

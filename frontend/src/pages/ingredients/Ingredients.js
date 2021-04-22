@@ -10,6 +10,8 @@ import sharedService from '../../services/shared';
 import AutocompleteInput from '../../components/shared/AutocompleteInput';
 import { FeedbackContext } from '../../contexts/feedback';
 import Loading from '../../components/shared/Loading';
+import RecipeBookInput from '../../components/shared/RecipeBookInput';
+import { AuthContext } from '../../contexts/auth';
 
 const useStyles = makeStyles((theme) => ({
   search: {
@@ -33,23 +35,35 @@ const Ingredients = () => {
 
   const ingredientDefault = {
     name: '',
-    portion: 0
+    portion: 0,
+    preparation: '',
+    duration: 0
   }
 
   const { message, setMessage } = useContext(FeedbackContext)
+  const { selectedRecipes, setSelectedRecipes } = useContext(AuthContext)
 
   const [enums, setEnums] = useState()
   const [allIngredients, setAllIngredients] = useState(false)
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [ingredient, setIngredient] = useState(ingredientDefault)
 
+  const getIngredients = async () => {
+    try {
+      const { data: { ingredients: retrievedIngredients } } = await ingredientsService.getAllIngredients()
+      setAllIngredients(retrievedIngredients)
+
+    } catch (e) {
+      console.log(e ?.response ?.data)
+    }
+  }
+
   const getData = async () => {
     try {
       const { data: { enums: retrievedEnums } } = await sharedService.getEnums()
       setEnums(retrievedEnums)
 
-      const { data: { ingredients: retrievedIngredients} } = await ingredientsService.getAllIngredients()
-      setAllIngredients(retrievedIngredients)
+      getIngredients()
     } catch (e) {
       console.log(e ?.response ?.data)
     }
@@ -64,9 +78,10 @@ const Ingredients = () => {
   const handleSave = async () => {
     try {
       await ingredientsService.create(ingredient)
-      setIngredient()
+      setIngredient(ingredientDefault)
       setIsFormOpen(false)
-      getData()
+      getIngredients()
+      setSelectedRecipes([])
 
       setMessage('Ingredient created')
     } catch (e) {
@@ -79,7 +94,8 @@ const Ingredients = () => {
       await ingredientsService.edit(ingredient._id, ingredient)
       setIngredient(ingredientDefault)
       setIsFormOpen(false)
-      getData()
+      getIngredients()
+      setSelectedRecipes([])
 
       setMessage('Ingredient updated')
     } catch (e) {
@@ -92,7 +108,8 @@ const Ingredients = () => {
       await ingredientsService.delete(ingredient._id)
       setIngredient(ingredientDefault)
       setIsFormOpen(false)
-      getData()
+      getIngredients()
+      setSelectedRecipes([])
 
       setMessage('Ingredient deleted')
     } catch (e) {
@@ -104,7 +121,7 @@ const Ingredients = () => {
     <div className={classes.search}>
       <AutocompleteInput
         label='Buscar ingrediente'
-        onChange={(v) => { setIngredient(v || {}); setIsFormOpen(Boolean(v)) }}
+        onChange={(v) => { setIngredient(v || {ingredientDefault}); setIsFormOpen(Boolean(v)) }}
         getOptionLabel={option => `${option.name}`}
         options={allIngredients}
         variant='outlined'
@@ -131,6 +148,11 @@ const Ingredients = () => {
       allIngredients={allIngredients}
       enums={enums}
     />}
+    <RecipeBookInput
+      selectedRecipes={selectedRecipes}
+      setSelectedRecipes={setSelectedRecipes}
+      options={allIngredients.filter(ingredient => ingredient.isComplex)}
+    />
   </> : <Loading />
 }
 

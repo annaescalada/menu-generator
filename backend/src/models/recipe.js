@@ -16,69 +16,19 @@ const recipeSchema = new mongoose.Schema({
     image: {
         type: String,
     },
+    season: [{
+        type: String,
+        enum: seasonEnum,
+        required: true,
+    }],
     tags: [{
         type: String,
         enum: [...inclusiveTags, ...exclusiveTags]
     }],
-    carbs: {
+    ingredients: {
         type: [mongoose.Schema.Types.ObjectId],
         ref: 'Ingredient',
-        required: function () {
-            return this.meal === 'desayuno' || this.meal === 'comida'
-        }
-    },
-    proteins: {
-        type: [mongoose.Schema.Types.ObjectId],
-        ref: 'Ingredient',
-        required: function () {
-            return this.meal === 'comida'
-        }
-    },
-    veggies: {
-        type: [mongoose.Schema.Types.ObjectId],
-        ref: 'Ingredient',
-        required: function () {
-            return this.meal === 'comida'
-        }
-    },
-    fats: {
-        type: [mongoose.Schema.Types.ObjectId],
-        ref: 'Ingredient',
-        required: function () {
-            return this.meal === 'desayuno' || this.meal === 'comida'
-        }
-    },
-    dairy: {
-        type: [mongoose.Schema.Types.ObjectId],
-        ref: 'Ingredient',
-        required: function () {
-            return this.meal === 'desayuno'
-        }
-    },
-    omega3: {
-        type: [mongoose.Schema.Types.ObjectId],
-        ref: 'Ingredient',
-        required: function () {
-            return this.meal === 'desayuno'
-        }
-    },
-    fruit: {
-        type: [mongoose.Schema.Types.ObjectId],
-        ref: 'Ingredient',
-        required: function () {
-            return this.meal === 'desayuno'
-        }
-    },
-    berries: {
-        type: [mongoose.Schema.Types.ObjectId],
-        ref: 'Ingredient',
-        required: function () {
-            return this.meal === 'desayuno'
-        }
-    },
-    condiments: {
-        type: [mongoose.Schema.Types.ObjectId],
-        ref: 'Ingredient',
+        required: true
     },
     duration: {
         type: Number,
@@ -96,20 +46,6 @@ const recipeSchema = new mongoose.Schema({
         required: true
     },
 })
-
-// recipeSchema.methods.toJSON = function () {
-//     try {
-//         const recipeObject = this.toObject()
-    
-//         recipeObject.season = _.intersection(...recipeGroups
-//             .map(key => _.intersection(...recipeObject[key] && recipeObject[key].map(ingredient => ingredient.season) || [] ))
-//             .filter(el => el.length))
-    
-//         return recipeObject
-//     } catch(e) {
-//         console.log(e)
-//     }
-// }
 
 const Recipe = mongoose.model('Recipe', recipeSchema)
 

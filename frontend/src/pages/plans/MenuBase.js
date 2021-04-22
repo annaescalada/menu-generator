@@ -1,9 +1,9 @@
-import React, { useContext } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { makeStyles, Typography, Paper, Grid } from '@material-ui/core';
 import { AuthContext } from '../../contexts/auth'
 import ErrorIcon from '@material-ui/icons/Error';
 import moment from 'moment'
-import { config } from './planConfig'
+import sharedService from '../../services/shared';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -80,7 +80,15 @@ const MenuBase = () => {
 
     const { selectedPlan: plan, selectedPatient: patient } = useContext(AuthContext)
 
-    const { keyIconLabel } = config
+    const [enums, setEnums] = useState([])
+
+    useEffect(() => {
+        const getData = async () => {
+            const { data: { enums: retrievedEnums } } = await sharedService.getEnums()
+            setEnums(retrievedEnums)
+        }
+        getData()
+    }, [])
     
     return <>
         <div className={classes.container}>
@@ -100,7 +108,7 @@ const MenuBase = () => {
                             </div>
                         </Grid>
                         <Grid xs={4} className={classes.portionContainer} item>
-                            {keyIconLabel.map(({ icon, key }) => meal[key] ? <div className={classes.portionName}>
+                            {enums?.keyIconLabel?.map(({ icon, key }) => meal[key] ? <div className={classes.portionName}>
                                 <Typography variant='h6' color='primary'>
                                     {meal[key]}x
                             </Typography>
@@ -130,7 +138,7 @@ const MenuBase = () => {
                 </Paper>
 
                 <Paper className={classes.legend}>
-                    {keyIconLabel.map(({ icon, label }) => <div className={classes.portionName}>
+                    {enums?.keyIconLabel?.map(({ icon, label }) => <div className={classes.portionName}>
                         <img className={classes.imgLegend} src={`/images/Food-icons/${icon}.png`} alt="icon meal" />
                         <Typography variant='body1' color='primary'>
                             {label}

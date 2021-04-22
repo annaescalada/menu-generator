@@ -8,6 +8,12 @@ const ingredientSchema = new mongoose.Schema({
         trim: true,
         required: true,
     },
+    image: {
+        type: String,
+    },
+    link: {
+        type: String,
+    },
     season: [{
         type: String,
         enum: seasonEnum,
@@ -34,6 +40,7 @@ const ingredientSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    portionAmount: Number,
     duration: {
         type: Number,
         reqwuired: true

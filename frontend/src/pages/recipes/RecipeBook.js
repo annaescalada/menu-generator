@@ -1,20 +1,19 @@
 import React, { useState, useEffect, useContext } from 'react'
 import moment from 'moment'
 import { AuthContext } from '../../contexts/auth';
-import { Typography, Avatar, Card, CardMedia, CardHeader, IconButton, CardContent, CardActions, Chip, Divider, Grid } from '@material-ui/core';
+import { Typography, Card, CardMedia, CardContent, Chip, Divider, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
-
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import ShareIcon from '@material-ui/icons/Share';
 import sharedService from '../../services/shared';
-import AccessTimeIcon from '@material-ui/icons/AccessTime';
-import { config } from '../plans/planConfig'
+import AccessTimeIcon from '@material-ui/icons/AccessTime'
+import { config } from './recipesConfig'
 
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        padding: '1em'
+        // padding: '1em'
+    },
+    content: {
+        padding: '1.5em'
     },
     media: {
         height: 0,
@@ -54,9 +53,31 @@ const useStyles = makeStyles((theme) => ({
 const RecipeBook = () => {
     const classes = useStyles()
 
-    const { keyIconLabel } = config
+    const { recipeStructure } = config
 
     const { selectedRecipes, selectedPatient: patient } = useContext(AuthContext)
+
+    const [enums, setEnums] = useState([])
+
+    const getIngredientsList = (recipe) => recipeStructure(recipe).map(({ options, factor }) => {
+        const filteredIngredients = recipe.ingredients ?.filter(ingredient => options.includes(ingredient.group))
+       
+        const groupLength = filteredIngredients ?.length
+       
+        return filteredIngredients ?.map(({ name, portion, unit }) => {
+            const recipePortion = factor ? portion * factor / groupLength : portion
+
+            return <Typography>{recipePortion}{unit} {name}</Typography>
+        })
+    })
+
+    useEffect(() => {
+        const getData = async () => {
+            const { data: { enums: retrievedEnums } } = await sharedService.getEnums()
+            setEnums(retrievedEnums)
+        }
+        getData()
+    }, [])
 
     return <>
         <div className={classes.container}>
@@ -66,23 +87,21 @@ const RecipeBook = () => {
             <Grid container spacing={5}>
                 {selectedRecipes.map(recipe => <Grid item xs={4}>
                     <Card className={classes.root}>
-                        {/* {recipe.image && <CardMedia
+                        {recipe.image && <CardMedia
                             className={classes.media}
                             image={recipe.image}
                             title={recipe.name}
-                        />} */}
-                        <CardContent>
-                            <Typography variant='h5'>{recipe.name}</Typography>
+                        />}
+                        <CardContent className={classes.content}>
+                            <Typography align='center' variant='h5'>{recipe.name}</Typography>
                             <div className={classes.chipContainer}>
-                                <Chip className={classes.chip} icon={<AccessTimeIcon />} label={recipe.duration} alt="icon meal" color='secondary' />
+                                <Chip className={classes.chip} icon={<AccessTimeIcon />} label={`${recipe.duration}'`} alt="icon meal" color='secondary' />
                                 {recipe.utensils.map(utensil => <Chip className={classes.chip} label={utensil} alt="icon meal" color='secondary' />)}
 
 
                             </div>
                             <Typography variant='h6' color='primary'>Ingredientes</Typography>
-                            {keyIconLabel.map(({ key, icon }) => recipe[key] ?.map(ingredient => <>
-                                <Typography>{ingredient.portion}{ingredient.unit} {ingredient.name}</Typography>
-                            </>))}
+                            {getIngredientsList(recipe)}
                             <Divider light='true' style={{ margin: '1em 0' }} />
                             <Typography variant='h6' color='primary'>Preparación</Typography>
                             <Typography><div dangerouslySetInnerHTML={{ __html: recipe.preparation }}></div></Typography>

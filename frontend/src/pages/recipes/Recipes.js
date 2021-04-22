@@ -12,8 +12,9 @@ import { FeedbackContext } from '../../contexts/feedback';
 import Loading from '../../components/shared/Loading';
 import recipesService from '../../services/recipes';
 import RecipesForm from './RecipesForm';
+import FileCopyIcon from '@material-ui/icons/FileCopy';
 import { AuthContext } from '../../contexts/auth';
-import SelectInput from '../../components/shared/SelectInput';
+import RecipeBookInput from '../../components/shared/RecipeBookInput';
 
 const useStyles = makeStyles((theme) => ({
     search: {
@@ -53,7 +54,7 @@ const Recipes = () => {
     const [allRecipes, setAllRecipes] = useState([])
     const [isFormOpen, setIsFormOpen] = useState(false)
     const [recipe, setRecipe] = useState(defaultRecipe)
-    
+
     const getRecipes = async () => {
         try {
             const { data: { recipes: retrievedRecipes } } = await recipesService.getAllRecipes()
@@ -148,6 +149,9 @@ const Recipes = () => {
             {recipe._id && <Fab className={classes.delete} color="secondary" onClick={handleDelete}>
                 <DeleteIcon className={classes.deleteIcon} />
             </Fab>}
+            {recipe._id && <Fab className={classes.delete} color="secondary" onClick={() => setRecipe(prev => ({ ...prev, _id: null }))}>
+                <FileCopyIcon className={classes.deleteIcon} />
+            </Fab>}
         </div>
         {isFormOpen && <RecipesForm
             recipe={recipe}
@@ -159,17 +163,11 @@ const Recipes = () => {
             enums={enums}
         />}
         <Divider style={{ margin: '3em 0' }} />
-        <Typography align='center' variant='h5' color='primary'>Recipe Book</Typography>
-        <AutocompleteInput
-                value={selectedRecipes || []}
-                onChange={(v) => setSelectedRecipes(v)}
-                multiple
-                getOptionLabel={option => `${option.name}`}
-                options={allRecipes}
-            />
-        <Link className={classes.link} to={`/recipe-book`}>
-            <Button className={classes.docButton} onClick={() => { }} color="primary" variant="outlined">Grupos de alimentos</Button>
-        </Link>
+        <RecipeBookInput
+            selectedRecipes={selectedRecipes}
+            setSelectedRecipes={setSelectedRecipes}
+            options={allRecipes}
+        />
     </> : <Loading />
 }
 
