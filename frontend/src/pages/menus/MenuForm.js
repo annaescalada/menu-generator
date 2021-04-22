@@ -193,14 +193,14 @@ const MenuForm = ({ menu, setMenu, handleClick, enums = [], error, allIngredient
             multiple
             value={menu.toIncludeTags || []}
             onChange={(v) => setMenu(prev => ({ ...prev, toIncludeTags: v }))}
-            options={[...enums.inclusiveTags, ...enums.exclusiveTags]}
+            options={enums.inclusiveTags}
         />
         <SelectInput
             label="Tags to exclude"
             multiple
             value={menu.toExcludeTags || []}
             onChange={(v) => setMenu(prev => ({ ...prev, toExcludeTags: v }))}
-            options={[...enums.inclusiveTags, ...enums.exclusiveTags]}
+            options={enums.exclusiveTags}
         />
         <div className={classes.chipContainer}>
             {getComplexIngredients()}
