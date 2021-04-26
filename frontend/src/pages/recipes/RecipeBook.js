@@ -6,14 +6,18 @@ import { makeStyles } from '@material-ui/styles';
 import sharedService from '../../services/shared';
 import AccessTimeIcon from '@material-ui/icons/AccessTime'
 import { config } from './recipesConfig'
-
+import KitchenIcon from '@material-ui/icons/Kitchen';
 
 const useStyles = makeStyles((theme) => ({
     root: {
         // padding: '1em'
+        background: theme.palette.primary.extraMegaLight
     },
     content: {
-        padding: '1.5em'
+        padding: '1.5em',
+    },
+    isComplex: {
+        background: theme.palette.secondary.extraLight
     },
     media: {
         height: 0,
@@ -38,15 +42,14 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         flexWrap: 'wrap',
         justifyContent: 'center',
-        margin: '1em',
-        padding: '1em'
+        padding: '0.1em'
     },
     chip: {
         margin: '0.5em',
         color: 'white',
         padding: '0.5em',
         maxWidth: 'fit-content'
-    },
+    }
 }))
 
 
@@ -87,17 +90,17 @@ const RecipeBook = () => {
             <Grid container spacing={5}>
                 {selectedRecipes.map(recipe => <Grid item xs={4}>
                     <Card className={classes.root}>
-                        {recipe.image && <CardMedia
+                        {/* {recipe.image && <CardMedia
                             className={classes.media}
                             image={recipe.image}
                             title={recipe.name}
-                        />}
-                        <CardContent className={classes.content}>
+                        />} */}
+                        <CardContent className={[classes.content, recipe.isComplex && classes.isComplex].join(' ')}>
                             <Typography align='center' variant='h5'>{recipe.name}</Typography>
                             <div className={classes.chipContainer}>
                                 <Chip className={classes.chip} icon={<AccessTimeIcon />} label={`${recipe.duration}'`} alt="icon meal" color='secondary' />
                                 {recipe.utensils.map(utensil => <Chip className={classes.chip} label={utensil} alt="icon meal" color='secondary' />)}
-
+                                {recipe.portionAmount && <Chip className={classes.chip} icon={<KitchenIcon />} label={`${recipe.portionAmount}R`} alt="icon meal" color='secondary' />}
 
                             </div>
                             <Typography variant='h6' color='primary'>Ingredientes</Typography>

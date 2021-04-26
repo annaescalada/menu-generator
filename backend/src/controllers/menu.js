@@ -2,7 +2,28 @@ const express = require('express')
 const Menu = require('../models/menu')
 const router = new express.Router()
 const auth = require('../middlewares/auth')
+const { daysEnum, menuMealEnum } = require('../bin/enums')
 require('dotenv').config()
+
+const populateString = () => {
+    let string = ''
+    daysEnum.forEach(day => {
+        menuMealEnum.forEach(meal => {
+            string += `content.${day}_${meal}.recipe content.${day}_${meal}.ingredients `
+        })
+    })
+    return string
+}
+
+const nestedPopulateString = () => {
+    let string = ''
+    daysEnum.forEach(day => {
+        menuMealEnum.forEach(meal => {
+            string += `content.${day}_${meal}.recipe.ingredients `
+        })
+    })
+    return string
+}
 
 router.post('/menu', auth, async (req, res) => {
     const menu = new Menu(req.body)
@@ -36,10 +57,18 @@ router.patch('/menu/:id', auth, async (req, res) => {
 
 router.get('/menus', auth, async (req, res) => {
     try {
-        const menus = await Menu.find().populate('content.recipe content.basic.ingredients')
+        const menus = await Menu
+            .find()
+            .populate({ 
+                path: populateString(), 
+                populate: {
+                    path: 'ingredients', 
+                }
+            })
 
         res.status(200).send({ menus })
     } catch (e) {
+        console.log(e)
         res.status(400).send(e)
     }
 })

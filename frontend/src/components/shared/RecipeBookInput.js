@@ -14,7 +14,13 @@ const useStyles = makeStyles((theme) => ({
     docButton: {
         color: theme.palette.primary.main,
         margin: '1.5em 0 0 0'
-    }
+    },
+    link: {
+        textDecoration: 'none',
+        display: 'flex',
+        justifyContent: 'center',
+        color: theme.palette.primary.main,
+    },
 }))
 
 const RecipeBookInput = ({ selectedRecipes, setSelectedRecipes, options }) => {
@@ -31,8 +37,8 @@ const RecipeBookInput = ({ selectedRecipes, setSelectedRecipes, options }) => {
                 getOptionLabel={option => `${option.name}`}
                 options={options}
             />
-            <Link to={`/recipe-book`}>
-                <Button className={classes.docButton} onClick={() => { }} color="primary" variant="outlined">Grupos de alimentos</Button>
+            <Link className={classes.link} to={`/recipe-book`}>
+                <Button className={classes.docButton} onClick={() => { }} color="primary" variant="outlined">Listado de recetas</Button>
             </Link>
         </div>
     </>

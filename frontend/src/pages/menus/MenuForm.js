@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import _ from 'lodash'
 import { Typography, makeStyles, Chip, Button, Paper } from '@material-ui/core'
+import { Link } from 'react-router-dom'
 
 import TextInput from '../../components/shared/TextInput.js';
 import AutocompleteInput from '../../components/shared/AutocompleteInput.js';
@@ -52,14 +53,26 @@ const useStyles = makeStyles((theme) => ({
         margin: '1em',
         borderRadius: '15px',
         background: theme.palette.secondary.extraLight
-    }
+    },
+    docButton: {
+        color: theme.palette.primary.main,
+        margin: '1.5em 0 0 0'
+    },
+    link: {
+        textDecoration: 'none',
+        display: 'flex',
+        justifyContent: 'center',
+        color: theme.palette.primary.main,
+    },
 }))
 
-const MenuForm = ({ menu, setMenu, handleClick, enums = [], error, allIngredients, allRecipes }) => {
+const MenuForm = ({ menu, setMenu, handleClick, enums = [], error, allIngredients, allRecipes, setSelectedRecipes }) => {
     const classes = useStyles()
 
     const [ingredientsOptions, setIngredientsOptions] = useState(allIngredients)
     const [recipesOptions, setRecipesOptions] = useState(allRecipes)
+
+    const firstUppercase = (str) => str.charAt(0).toUpperCase() + str.slice(1)
 
     const updateContent = (v, coordinates, key) => {
         setMenu(prev => ({
@@ -101,6 +114,43 @@ const MenuForm = ({ menu, setMenu, handleClick, enums = [], error, allIngredient
         filterOptionsBySeasonAndTags()
     }, [menu.season, menu.toExcludeTags, menu.toIncludeTags])
 
+    useEffect(() => {
+        setSelectedRecipesOnMenuChange()
+    }, [menu.content])
+
+    const setSelectedRecipesOnMenuChange = () => {
+        if (!menu.content) return
+
+        const meals = Object.keys(menu.content)
+
+        if (!meals ?.length) return setSelectedRecipes([])
+
+        let recipes = []
+
+        meals.forEach(meal => {
+            if (menu.content[meal].recipe) recipes.push(menu.content[meal].recipe)
+        })
+
+        meals.forEach(meal => {
+            if (menu.content[meal].ingredients) {
+                menu.content[meal].ingredients.forEach(ing => {
+                    if (ing.isComplex) {
+                        recipes.push(ing)
+                    }
+                })
+            }
+        })
+        console.log(recipes)
+
+        // recipes.sort((a, b) => {
+        //     if(a.name < b.name) { return -1; }
+        //     if(a.name > b.name) { return 1; }
+        //     return 0;
+        // })
+
+        setSelectedRecipes(_.uniqBy(recipes, e => e._id))
+    }
+
     const filterRecipeOptions = (coordinates) => {
         let filteredOptions = _.clone(recipesOptions)
 
@@ -140,13 +190,13 @@ const MenuForm = ({ menu, setMenu, handleClick, enums = [], error, allIngredient
 
     }
 
-    const buildGrid = () => enums.daysEnum ?.map(day => <div className={classes.day}>
-        <Typography variant='h6'>{day}</Typography>
+    const buildGrid = (content) => enums.daysEnum ?.map(day => <div className={classes.day}>
+        <Typography align='center' variant='h6'>{firstUppercase(day)}</Typography>
         {enums.menuMealEnum ?.map(meal => {
             const coordinates = `${day}_${meal}`
 
             return <div className={classes.meal}>
-                <Typography variant='body1'>{meal}</Typography>
+                <Typography align='center' variant='body1'>{firstUppercase(meal)}</Typography>
                 <TextInput
                     label="Name"
                     value={menu.content ?.[coordinates] ?.name || []}
@@ -169,10 +219,23 @@ const MenuForm = ({ menu, setMenu, handleClick, enums = [], error, allIngredient
                 />
             </div>
         })}
-
     </div>)
     
     return <Paper className={classes.container}>
+        <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+            <Link className={classes.link} to={`/menu-grid`}>
+                <Button className={classes.docButton} onClick={() => { }} color="primary" variant="outlined">Menú</Button>
+            </Link>
+            <Link className={classes.link} to={`/grocery-list`}>
+                <Button className={classes.docButton} onClick={() => { }} color="primary" variant="outlined">Lista de la compra</Button>
+            </Link>
+            <Link className={classes.link} to={`/recipe-book`}>
+                <Button className={classes.docButton} onClick={() => { }} color="primary" variant="outlined">Recetario</Button>
+            </Link>
+            {/* <Link className={classes.link} to={`/meal-prep`}>
+                <Button className={classes.docButton} onClick={() => { }} color="primary" variant="outlined">Meal prep</Button>
+            </Link> */}
+        </div>
         <TextInput
             label="Name"
             value={menu.name}

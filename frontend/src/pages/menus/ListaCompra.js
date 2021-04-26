@@ -13,6 +13,7 @@ import LocalFloristIcon from '@material-ui/icons/LocalFlorist';
 import _ from 'lodash'
 import moment from 'moment'
 import { AuthContext } from '../../contexts/auth';
+import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -45,8 +46,7 @@ const useStyles = makeStyles((theme) => ({
         marginRight: '1em'
     },
     tagIcon: {
-        height: '0.6em',
-        // marginLeft: '0.2em'
+        height: '0.8em',
     },
     groupContainer: {
         display: 'flex',
@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'center'
     },
     group: {
-        minWidth:'23%',
+        minWidth: '23%',
         margin: '1em',
         padding: '1em',
         borderRadius: '15px',
@@ -65,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
 const GruposAlimentosRaciones = (props) => {
     const classes = useStyles()
 
-    const { selectedPatient: patient, setSelectedPatient: setPatient } = useContext(AuthContext)
+    const { selectedPatient: patient, selectedMenu: menu } = useContext(AuthContext)
 
     const [enums, setEnums] = useState({})
     const [allIngredients, setAllIngredients] = useState()
@@ -78,21 +78,26 @@ const GruposAlimentosRaciones = (props) => {
             const { data: { enums: retrievedEnums } } = await sharedService.getEnums()
             setEnums(retrievedEnums)
 
-            const { data: { ingredients: retrievedIngredients } } = await ingredientsService.getAllIngredients()
+            const meals = menu.content ? Object.keys(menu.content) : []
 
-            let filteredIngredients = retrievedIngredients
+            let ingredients = []
 
-            if (patient ?.toIncludeTags ?.length) {
-                filteredIngredients = retrievedIngredients
-                    .filter(ingredient => _.intersection(patient.toIncludeTags || [], ingredient.tags).length !== 0)
-            }
+            meals.forEach(meal => {
+                debugger
+                if (menu.content[meal] ?.ingredients) {
+                    const filteredIngredients = menu.content[meal] ?.ingredients ? menu.content[meal].ingredients.filter(ingredient => !ingredient.isComplex) : []
+                    ingredients.push(...filteredIngredients)
+                }
 
-            if (patient ?.toExcludeTags ?.length) {
-                filteredIngredients = retrievedIngredients
-                    .filter(ingredient => _.intersection(patient.toExcludeTags || [], ingredient.tags).length === 0)
-            }
+                if (menu.content[meal] ?.recipe) {
+                    const filteredIngredients = menu.content[meal].recipe ?.ingredients ? menu.content[meal].recipe.ingredients.filter(ingredient => !ingredient.isComplex) : []
+                    ingredients.push(...filteredIngredients)
+                }
+            })
 
-            setAllIngredients(_.orderBy(filteredIngredients), ['name'], ['asc'])
+            console.log(ingredients)
+
+            setAllIngredients(_.orderBy(ingredients), ['name'], ['asc'])
 
             setFoodLabels(retrievedEnums.groupEnum.map((group, index) => ({
                 index,
@@ -103,13 +108,25 @@ const GruposAlimentosRaciones = (props) => {
         }
         getData()
     }, [])
-    console.log(patient)
 
-    console.log(foodLabels)
+    const numberOfPortions = (ingredient) => _.countBy(allIngredients, (rec) => rec._id === ingredient._id).true
+
+    const quantityString = (portion, count, group, unit) => {
+        const factor = {
+            U: 1,
+            g: 1,
+            cs: 10,
+            cp: 5,
+            tz: ['hortalizas', 'otras verduras', 'crucíferas'].includes(group) ? 25 : 100
+        }
+        const quantity = portion * count * factor[unit]
+
+        return `${quantity} ${unit === 'U' ? unit : 'g'}`
+    }
 
     return <>
         <div className={classes.container}>
-            <Typography variant='h4' color='primary'>Grupos de alimentos y ración recomendada</Typography>
+            <Typography variant='h4' color='primary'>Lista de la compra semanal</Typography>
             <Typography variant='body1'>{patient.name} - {moment().format('DD/MM/yy')}</Typography>
             <Divider light='true' style={{ margin: '2em 0' }} />
 
@@ -128,46 +145,24 @@ const GruposAlimentosRaciones = (props) => {
                                     .map(ingredient => firstUppercase(ingredient.name))
                                     .join(', ')
                                 }</Typography>
-                                : allIngredients
+                                : _.uniqBy(allIngredients
                                     .filter(ingredient => ingredient.group === food.key)
                                     .map(ingredient => <Grid container spacing={1} alignItems='center' style={{ lineHeight: '2em' }}>
-                                        <Grid item xs={4}>
-                                            <Typography variant='body1'>{firstUppercase(ingredient.name)}</Typography>
-                                        </Grid>
-                                        <Grid item xs={1}>
-                                            {ingredient.tags ?.includes('semiprocesado') && <ErrorIcon className={classes.tagIcon} color='secondary' />}
-                                            {ingredient.tags ?.includes('cocido') && <WatchLaterIcon className={classes.tagIcon} color='primary' />}
-                                        </Grid>
-                                        <Grid item xs={2}>
-                                            <Typography variant='body1'>{`${ingredient.portion} ${ingredient.unit}`}</Typography>
+                                         <Grid item xs={2}>
+                                            <CheckBoxOutlineBlankIcon className={classes.tagIcon} />
                                         </Grid>
                                         <Grid item xs={5}>
-                                            {ingredient.season ?.includes('verano') && <WbSunnyIcon className={classes.tagIcon} size='small' color='secondary' />}
-                                            {ingredient.season ?.includes('otoño') && <CloudIcon className={classes.tagIcon} size='small' color='secondary' />}
-                                            {ingredient.season ?.includes('invierno') && <AcUnitIcon className={classes.tagIcon} size='small' color='secondary' />}
-                                            {ingredient.season ?.includes('primavera') && <LocalFloristIcon className={classes.tagIcon} size='small' color='secondary' />}
+                                            <Typography variant='body1'>{firstUppercase(ingredient.name)}</Typography>
+                                        </Grid>
+                                        <Grid item xs={5}>
+                                            <Typography variant='body1'>{`${numberOfPortions(ingredient)}R (≈ ${quantityString(ingredient.portion, numberOfPortions(ingredient), ingredient.group, ingredient.unit)})`}</Typography>
                                         </Grid>
                                     </Grid>
-                                    )}
+                                    ),  e => e._id)}
                         </div>
                     </div>
                     : null)}
             </div>
-
-            <Paper className={classes.legend}>
-                {!patient.tags ?.includes('semiprocesado') && <ErrorIcon className={classes.tagIcon} color='secondary' />}
-                {!patient.tags ?.includes('semiprocesado') && <Typography style={{ marginRight: '2em' }} variant='subtitle2'>Semi-procesado</Typography>}
-                {!patient.tags ?.includes('cocido') && <WatchLaterIcon className={classes.tagIcon} color='primary' />}
-                {!patient.tags ?.includes('cocido') && <Typography style={{ marginRight: '2em' }} variant='subtitle2'>cocido</Typography>}
-                <WbSunnyIcon className={classes.tagIcon} size='small' color='secondary' />
-                <Typography style={{ marginRight: '2em' }} variant='subtitle2'>Verano</Typography>
-                <CloudIcon className={classes.tagIcon} size='small' color='secondary' />
-                <Typography style={{ marginRight: '2em' }} variant='subtitle2'>Otoño</Typography>
-                <AcUnitIcon className={classes.tagIcon} size='small' color='secondary' />
-                <Typography style={{ marginRight: '2em' }} variant='subtitle2'>Invierno</Typography>
-                <LocalFloristIcon className={classes.tagIcon} size='small' color='secondary' />
-                <Typography style={{ marginRight: '2em' }} variant='subtitle2'>Primavera</Typography>
-            </Paper>
         </div>
     </>
 }

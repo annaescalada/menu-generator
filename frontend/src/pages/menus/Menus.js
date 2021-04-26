@@ -3,6 +3,7 @@ import { makeStyles, Fab } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add'
 import Close from '@material-ui/icons/Close'
 import DeleteIcon from '@material-ui/icons/Delete'
+import _ from 'lodash'
 
 import sharedService from '../../services/shared';
 import AutocompleteInput from '../../components/shared/AutocompleteInput';
@@ -34,8 +35,9 @@ const useStyles = makeStyles((theme) => ({
 const Menus = () => {
     const classes = useStyles()
 
-    const { selectedMenu: menu, setSelectedMenu: setMenu } = useContext(AuthContext)
+    const { selectedMenu: menu, setSelectedMenu: setMenu, selectedRecipes, setSelectedRecipes } = useContext(AuthContext)
     const { message, setMessage } = useContext(FeedbackContext)
+    console.log('selectedRecipes', selectedRecipes)
 
     console.log('selectedMenu', menu)
 
@@ -45,7 +47,7 @@ const Menus = () => {
     const [allIngredients, setAllIngredients] = useState()
     const [allRecipes, setAllRecipes] = useState()
 
-    const getAllMenus = async () => {
+    const getAllMenus = async (ingredients, recipes) => {
         try {
             const { data: { menus: retrievedMenus } } = await menuService.getAllMenus()
             setAllMenus(retrievedMenus)
@@ -65,7 +67,7 @@ const Menus = () => {
             const { data: { recipes: retrievedRecipes } } = await recipesService.getAllRecipes()
             setAllRecipes(retrievedRecipes)
 
-            getAllMenus()
+            getAllMenus(retrievedIngredients, retrievedRecipes)
         } catch (e) {
             console.log(e ?.response ?.data)
         }
@@ -73,6 +75,7 @@ const Menus = () => {
 
     useEffect(() => {
         getData()
+        setSelectedRecipes([])
     }, [])
 
     console.log('menu==>', menu)
@@ -85,6 +88,7 @@ const Menus = () => {
 
             setMessage('Menu created')
         } catch (e) {
+            console.log(e)
             setMessage('Error creating menu')
         }
     }
@@ -146,6 +150,7 @@ const Menus = () => {
             enums={enums}
             allIngredients={allIngredients}
             allRecipes={allRecipes}
+            setSelectedRecipes={setSelectedRecipes}
         />}
     </> : <Loading />
 }

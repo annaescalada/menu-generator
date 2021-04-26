@@ -85,7 +85,7 @@ const RecipesForm = ({ recipe, setRecipe, error, handleClick, allIngredients, en
         return [...exclusiveTags, ...inclusiveTags]
     }
 
-    const getIngredientsList = () => recipeStructure(recipe).map(({ options, factor }) => {
+    const getIngredientsList = () => recipeStructure(recipe.meal).map(({ options, factor }) => {
         const filteredIngredients = recipe.ingredients ?.filter(ingredient => options.includes(ingredient.group))
        
         const groupLength = filteredIngredients ?.length

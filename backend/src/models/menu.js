@@ -1,5 +1,26 @@
 const mongoose = require('mongoose')
-const { groupEnum, seasonEnum, portionEnum, exclusiveTags, inclusiveTags, utensilsEnum } = require('../bin/enums')
+const { seasonEnum, exclusiveTags, inclusiveTags, utensilsEnum, daysEnum, menuMealEnum } = require('../bin/enums')
+
+const contentKeys = () => {
+    let keys = {}
+    daysEnum.forEach(day => {
+        menuMealEnum.forEach(meal => {
+            keys[`${day}_${meal}`] = {
+                name: String,
+                recipe: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: 'Recipe',
+                },
+                ingredients: {
+                    type: [mongoose.Schema.Types.ObjectId],
+                    ref: 'Ingredient',
+                },
+            }
+        })
+    })
+    return keys
+}
+
 
 const menuSchema = new mongoose.Schema({
     name: {
@@ -29,7 +50,7 @@ const menuSchema = new mongoose.Schema({
         }],
     },
     content: {
-        type: Object
+        ...contentKeys()
     }
 })
 

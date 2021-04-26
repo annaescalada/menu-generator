@@ -19,7 +19,7 @@ import Plans from './pages/plans/Plans';
 import MenuBase from './pages/plans/MenuBase';
 import RecipeBook from './pages/recipes/RecipeBook';
 import MenuGrid from './pages/menus/MenuGrid';
-import GroceryList from './pages/menus/GroceryList';
+import ListaCompra from './pages/menus/ListaCompra';
 import MealPrep from './pages/menus/MealPrep';
 
 ReactDOM.render(
@@ -29,7 +29,7 @@ ReactDOM.render(
                 <ThemeProvider theme={theme}>
                     <App>
                         <PrivateRoute path='/meal-prep' component={MealPrep} />
-                        <PrivateRoute path='/grocery-list' component={GroceryList} />
+                        <PrivateRoute path='/grocery-list' component={ListaCompra} />
                         <PrivateRoute path='/menu-grid' component={MenuGrid} />
                         <PrivateRoute path='/recipe-book' component={RecipeBook} />
                         <PrivateRoute path='/menu-base' component={MenuBase} />
