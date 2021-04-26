@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
         maxWidth: '29%'
     },
     meal: {
-        padding: '1em',
+        padding: '0.8em',
         margin: '1em',
         borderRadius: '15px',
         background: theme.palette.secondary.extraLight

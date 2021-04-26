@@ -59,7 +59,14 @@ const useStyles = makeStyles((theme) => ({
         padding: '1em',
         borderRadius: '15px',
         background: theme.palette.secondary.extraLight
-    }
+    },
+    legend: {
+        backgroundColor: theme.palette.primary.extraMegaLight,
+        borderRadius: '20px',
+        width: 'fit-content',
+        margin: '3em 0',
+        padding: '1em',
+    },
 }))
 
 const GruposAlimentosRaciones = (props) => {
@@ -68,6 +75,7 @@ const GruposAlimentosRaciones = (props) => {
     const { selectedPatient: patient, selectedMenu: menu } = useContext(AuthContext)
 
     const [enums, setEnums] = useState({})
+    const [repeatedAllIngredients, setRepeatedAllIngredients] = useState()
     const [allIngredients, setAllIngredients] = useState()
     const [foodLabels, setFoodLabels] = useState()
 
@@ -83,10 +91,14 @@ const GruposAlimentosRaciones = (props) => {
             let ingredients = []
 
             meals.forEach(meal => {
-                debugger
                 if (menu.content[meal] ?.ingredients) {
-                    const filteredIngredients = menu.content[meal] ?.ingredients ? menu.content[meal].ingredients.filter(ingredient => !ingredient.isComplex) : []
-                    ingredients.push(...filteredIngredients)
+                    const nonComplexIngredients = menu.content[meal].ingredients.filter(ingredient => !ingredient.isComplex)
+                    const complexIngredients = menu.content[meal].ingredients
+                        .filter(ingredient => ingredient.isComplex)
+                        .map(ingredient => ingredient.ingredients)
+                    console.log(_.flatten(complexIngredients))
+
+                    ingredients.push(...nonComplexIngredients, ..._.flatten(complexIngredients))
                 }
 
                 if (menu.content[meal] ?.recipe) {
@@ -95,9 +107,9 @@ const GruposAlimentosRaciones = (props) => {
                 }
             })
 
-            console.log(ingredients)
+            setRepeatedAllIngredients(ingredients)
 
-            setAllIngredients(_.orderBy(ingredients), ['name'], ['asc'])
+            setAllIngredients(_.orderBy(_.uniqBy(ingredients, e => e._id), ['name'], ['asc']))
 
             setFoodLabels(retrievedEnums.groupEnum.map((group, index) => ({
                 index,
@@ -109,7 +121,7 @@ const GruposAlimentosRaciones = (props) => {
         getData()
     }, [])
 
-    const numberOfPortions = (ingredient) => _.countBy(allIngredients, (rec) => rec._id === ingredient._id).true
+    const numberOfPortions = (ingredient) => _.countBy(repeatedAllIngredients, (rec) => rec._id === ingredient._id).true
 
     const quantityString = (portion, count, group, unit) => {
         const factor = {
@@ -117,7 +129,7 @@ const GruposAlimentosRaciones = (props) => {
             g: 1,
             cs: 10,
             cp: 5,
-            tz: ['hortalizas', 'otras verduras', 'crucíferas'].includes(group) ? 25 : 100
+            tz: group === 'hortalizas' ? 25 : group === 'otras verduras' ? 100 : 50
         }
         const quantity = portion * count * factor[unit]
 
@@ -145,10 +157,10 @@ const GruposAlimentosRaciones = (props) => {
                                     .map(ingredient => firstUppercase(ingredient.name))
                                     .join(', ')
                                 }</Typography>
-                                : _.uniqBy(allIngredients
+                                : allIngredients
                                     .filter(ingredient => ingredient.group === food.key)
                                     .map(ingredient => <Grid container spacing={1} alignItems='center' style={{ lineHeight: '2em' }}>
-                                         <Grid item xs={2}>
+                                        <Grid item xs={2}>
                                             <CheckBoxOutlineBlankIcon className={classes.tagIcon} />
                                         </Grid>
                                         <Grid item xs={5}>
@@ -158,10 +170,17 @@ const GruposAlimentosRaciones = (props) => {
                                             <Typography variant='body1'>{`${numberOfPortions(ingredient)}R (≈ ${quantityString(ingredient.portion, numberOfPortions(ingredient), ingredient.group, ingredient.unit)})`}</Typography>
                                         </Grid>
                                     </Grid>
-                                    ),  e => e._id)}
+                                    )}
                         </div>
                     </div>
                     : null)}
+            </div>
+
+            <div className={classes.legend}>
+                <Typography variant='h6' color='primary'>Otros...</Typography>
+                <div className={classes.chipContainer}>
+                    <Typography align='center' variant='body1' >{<CheckBoxOutlineBlankIcon className={classes.tagIcon} />} Fruta de temporada, frutos secos para los snacks. Condimentos, infusiones... </Typography>
+                </div>
             </div>
         </div>
     </>

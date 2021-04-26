@@ -83,7 +83,7 @@ const Menus = () => {
     const handleSave = async () => {
         try {
             const { data: { menu: createdMenu } } = await menuService.create(menu)
-            setMenu(createdMenu)
+            // setMenu(createdMenu)
             getAllMenus()
 
             setMessage('Menu created')
@@ -96,7 +96,7 @@ const Menus = () => {
     const handleEdit = async () => {
         try {
             const { data: { menu: updatedMenu } } = await menuService.edit(menu._id, menu)
-            setMenu(updatedMenu)
+            // setMenu(updatedMenu)
             getAllMenus()
 
             setMessage('Menu updated')

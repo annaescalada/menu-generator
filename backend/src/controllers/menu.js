@@ -15,16 +15,6 @@ const populateString = () => {
     return string
 }
 
-const nestedPopulateString = () => {
-    let string = ''
-    daysEnum.forEach(day => {
-        menuMealEnum.forEach(meal => {
-            string += `content.${day}_${meal}.recipe.ingredients `
-        })
-    })
-    return string
-}
-
 router.post('/menu', auth, async (req, res) => {
     const menu = new Menu(req.body)
 

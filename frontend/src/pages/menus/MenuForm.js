@@ -140,7 +140,6 @@ const MenuForm = ({ menu, setMenu, handleClick, enums = [], error, allIngredient
                 })
             }
         })
-        console.log(recipes)
 
         // recipes.sort((a, b) => {
         //     if(a.name < b.name) { return -1; }

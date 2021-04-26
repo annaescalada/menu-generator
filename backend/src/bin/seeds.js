@@ -285,6 +285,14 @@ const seeds = [
     },
     //lácteos
     {
+        name: 'Bebida vegetal',
+        season: ['verano', 'primavera', 'otoño', 'invierno'],
+        group: 'lácteos',
+        portion: 1,
+        unit: 'tz',
+        tags: ['genérico']
+    },
+    {
         name: 'Leche',
         season: ['verano', 'primavera', 'otoño', 'invierno'],
         group: 'lácteos',
@@ -415,7 +423,7 @@ const seeds = [
         tags: ['crudo']
     },
     {
-        name: "Garbanzos hervidos",
+        name: "Garbanzos cocidos",
         season: ['verano', 'primavera', 'otoño', 'invierno'],
         group: 'legumbres',
         portion: 1.5,
@@ -438,7 +446,7 @@ const seeds = [
         tags: ['crudo']
     },
     {
-        name: "Lentejas hervidas",
+        name: "Lentejas cocidas",
         season: ['verano', 'primavera', 'otoño', 'invierno'],
         group: 'legumbres',
         portion: 1.5,
@@ -469,7 +477,7 @@ const seeds = [
         tags: ['crudo']
     },
     {
-        name: "Judías blancas hervidas",
+        name: "Judías blancas cocidas",
         season: ['verano', 'primavera', 'otoño', 'invierno'],
         group: 'legumbres',
         portion: 1.5,
@@ -492,7 +500,7 @@ const seeds = [
         tags: ['crudo']
     },
     {
-        name: "Frijoles hervidos",
+        name: "Frijoles cocidos",
         season: ['verano', 'primavera', 'otoño', 'invierno'],
         group: 'legumbres',
         portion: 1.5,
@@ -916,6 +924,14 @@ const seeds = [
     },
     //frutas
     {
+        name: 'Fruta de temporada',
+        season: ['verano', 'primavera', 'otoño', 'invierno'],
+        group: 'frutas',
+        portion: 1,
+        unit: 'U',
+        tags: ['genérico']
+    },
+    {
         name: 'Caqui',
         season: ['otoño'],
         group: 'frutas',
@@ -943,6 +959,13 @@ const seeds = [
         portion: 1,
         unit: 'U',
         tags: ['eliminación']
+    },
+    {
+        name: 'Naranja',
+        season: ['primavera', 'invierno'],
+        group: 'frutas',
+        portion: 1,
+        unit: 'U',
     },
     {
         name: 'Pera',
@@ -1073,6 +1096,14 @@ const seeds = [
         unit: 'tz',
     },
     //frutos rojos
+    {
+        name: 'Frutos rojos',
+        season: ['verano', 'primavera', 'otoño', 'invierno'],
+        group: 'frutos rojos',
+        portion: 0.5,
+        unit: 'tz',
+        tags: ['genérico']
+    },
     {
         name: 'Fresa',
         season: ['primavera', 'invierno'],
