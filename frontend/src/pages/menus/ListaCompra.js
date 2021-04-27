@@ -179,7 +179,7 @@ const GruposAlimentosRaciones = (props) => {
             <div className={classes.legend}>
                 <Typography variant='h6' color='primary'>Otros...</Typography>
                 <div className={classes.chipContainer}>
-                    <Typography align='center' variant='body1' >{<CheckBoxOutlineBlankIcon className={classes.tagIcon} />} Fruta de temporada, frutos secos para los snacks. Condimentos, infusiones... </Typography>
+                    <Typography align='center' variant='body1' >Fruta de temporada y frutos secos para los snacks. Otros condimentos, infusiones... </Typography>
                 </div>
             </div>
         </div>

@@ -172,13 +172,23 @@ const MenuForm = ({ menu, setMenu, handleClick, enums = [], error, allIngredient
 
         let complexIngredients = []
 
+        const getComplex = (ingredients) => {
+            debugger
+            if (!ingredients) return
+            ingredients.forEach(ingredient => {
+                if (ingredient.isComplex) {
+                    if (!ingredient.portionAmount 
+                        || ingredient.portionAmount && !complexIngredients.find(_ingredient => _ingredient._id === ingredient._id)) {
+                            getComplex(ingredient.ingredients)
+                        } 
+                    complexIngredients.push(ingredient)
+                }
+            })
+        }
+
         meals.forEach(meal => {
-            menu.content[meal] ?.ingredients ?.forEach(ingredient => {
-                if (ingredient.isComplex) complexIngredients.push(ingredient)
-            })
-            menu.content[meal] ?.recipe ?.ingredients ?.forEach(ingredient => {
-                if (ingredient.isComplex) complexIngredients.push(ingredient)
-            })
+            getComplex(menu.content[meal] ?.ingredients)
+            getComplex(menu.content[meal] ?.recipe ?.ingredients)
         })
 
         return _.uniqBy(complexIngredients, e => e._id).map(ingredient => {

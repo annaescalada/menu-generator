@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
         margin: '1em',
         borderRadius: '15px',
         minWidth: '20%',
-        maxWidth: '29%'
+        maxWidth: '20%'
     },
     meal: {
         padding: '0.8em',
@@ -73,8 +73,13 @@ const useStyles = makeStyles((theme) => ({
         margin: '0.5em',
         color: 'white',
         padding: '0.5em',
-        maxWidth: 'fit-content'
+        maxWidth: 'fit-content',
+        background: theme.palette.secondary.light
     },
+    ingredientChip: {
+        margin: '0.2em',
+        background: theme.palette.primary.extraMegaLight
+    }
 }))
 
 const MenuGrid = () => {
@@ -104,7 +109,8 @@ const MenuGrid = () => {
         return filteredIngredients ?.map(({ name, portion, unit }) => {
             const recipePortion = factor ? portion * factor / groupLength : portion
 
-            return <Typography variant='caption'>{recipePortion}{unit} {name}</Typography>
+            // return <Typography align='center' variant='body1'>{recipePortion}{unit} {name}</Typography>
+            return <Chip className={classes.ingredientChip} label={`${recipePortion}${unit} ${name}`}/>
         })
     })
 
@@ -117,7 +123,10 @@ const MenuGrid = () => {
                 {menu.content ?.[coordinates] ?.recipe ?.name && <Typography align='center' variant='body1'>{<TurnedInIcon className={classes.tagIcon} color='secondary' />}{menu.content ?.[coordinates] ?.recipe ?.name}</Typography>}
                 {!menu.content ?.[coordinates] ?.recipe ?.name && <>
                     <Typography align='center' variant='body1'>{menu.content ?.[coordinates] ?.name}</Typography>
-                    <div className={classes.ingredientContainer}>
+                    {/* <div className={classes.ingredientContainer}>
+                        {getIngredientsList(coordinates, meal)}
+                    </div> */}
+                    <div className={classes.chipContainer}>
                         {getIngredientsList(coordinates, meal)}
                     </div>
                 </>}
@@ -134,13 +143,20 @@ const MenuGrid = () => {
 
         let complexIngredients = []
 
+        const getComplex = (ingredients) => {
+            debugger
+            if (!ingredients) return
+            ingredients.forEach(ingredient => {
+                if (ingredient.isComplex) {
+                    complexIngredients.push(ingredient)
+                    getComplex(ingredient.ingredients)
+                }
+            })
+        }
+
         meals.forEach(meal => {
-            menu.content[meal] ?.ingredients ?.forEach(ingredient => {
-                if (ingredient.isComplex) complexIngredients.push(ingredient)
-            })
-            menu.content[meal] ?.recipe ?.ingredients ?.forEach(ingredient => {
-                if (ingredient.isComplex) complexIngredients.push(ingredient)
-            })
+            getComplex(menu.content[meal] ?.ingredients)
+            getComplex(menu.content[meal] ?.recipe ?.ingredients)
         })
 
         return _.uniqBy(complexIngredients, e => e._id).map(ingredient => {

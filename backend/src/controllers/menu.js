@@ -41,6 +41,7 @@ router.patch('/menu/:id', auth, async (req, res) => {
 
         res.status(200).send({ menu })
     } catch (e) {
+        console.log(e)
         res.status(400).send(e)
     }
 })

@@ -29,3 +29,5 @@ app.use(sharedRouter)
 app.listen(port, ()=> {
     console.log(`Server is running on port ${port}`)
 })
+
+//initialize mongo: /Users/annaescalada/code/mongoDB/bin/mongod --dbpath=/Users/annaescalada/code/mongoDB-data

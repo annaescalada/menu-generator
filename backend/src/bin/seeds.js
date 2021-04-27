@@ -18,6 +18,13 @@ const Ingredient = require('../models/Ingredient.js')
 const seeds = [
     //condimentos
     {
+        name: 'Salsa de soja',
+        season: ['verano', 'primavera', 'otoño', 'invierno'],
+        group: 'condimentos',
+        portion: 1,
+        unit: 'cp',
+    },
+    {
         name: 'Albahaca fresca',
         season: ['verano', 'primavera'],
         group: 'condimentos',
@@ -584,7 +591,7 @@ const seeds = [
         tags: ['crudo']
     },
     {
-        name: "Quinoa hervida",
+        name: "Quinoa cocida",
         season: ['verano', 'primavera', 'otoño', 'invierno'],
         group: 'cereales',
         portion: 1.5,
@@ -627,6 +634,13 @@ const seeds = [
         group: 'cereales',
         portion: 2,
         unit: 'U',
+    },
+    {
+        name: 'Maíz dulce',
+        season: ['verano', 'primavera', 'otoño', 'invierno'],
+        group: 'cereales',
+        portion: 0.25,
+        unit: 'tz',
     },
     {
         name: 'Tortitas de maíz',
