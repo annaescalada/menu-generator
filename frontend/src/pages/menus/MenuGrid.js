@@ -24,8 +24,8 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.secondary.extraLight,
         borderRadius: '20px',
         width: 'fit-content',
-        margin: '3em 0',
-        padding: '1em',
+        margin: '2em 0',
+        padding: '0.5em',
     },
     titleContainer: {
         display: 'flex',
@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
     },
     day: {
         background: theme.palette.primary.extraLight,
-        padding: '1em',
+        padding: '0.5em',
         margin: '1em',
         borderRadius: '15px',
         minWidth: '20%',
@@ -71,10 +71,10 @@ const useStyles = makeStyles((theme) => ({
     },
     chip: {
         margin: '0.5em',
-        color: 'white',
+        // color: 'white',
         padding: '0.5em',
         maxWidth: 'fit-content',
-        background: theme.palette.secondary.light
+        color: theme.palette.secondary.dark
     },
     ingredientChip: {
         margin: '0.2em',
@@ -110,22 +110,21 @@ const MenuGrid = () => {
             const recipePortion = factor ? portion * factor / groupLength : portion
 
             // return <Typography align='center' variant='body1'>{recipePortion}{unit} {name}</Typography>
-            return <Chip className={classes.ingredientChip} label={`${recipePortion}${unit} ${name}`}/>
+            return <Chip className={classes.ingredientChip} label={`${recipePortion}${unit} ${name}`} />
         })
     })
 
     const buildGrid = (content) => enums.daysEnum ?.map(day => <div className={classes.day}>
-        <Typography align='center' color='primary' variant='h5'>{firstUppercase(day)}</Typography>
+        <Typography align='center' style={{ fontWeight: 600 }} color='primary' variant='h5'>{firstUppercase(day)}</Typography>
         {enums.menuMealEnum ?.map(meal => {
             const coordinates = `${day}_${meal}`
 
             return <div className={classes.meal}>
+                <Typography align='center' style={{ fontWeight: 600 }} variant='h6'>{firstUppercase(meal)}</Typography>
+                <Typography align='center' style={{ marginBottom: '1em' }} color='secondary' variant='body1'>{meal === 'desayuno' ? '(9:00)' : meal === 'comida' ? '(13:30)' : '(20:30)'}</Typography>
                 {menu.content ?.[coordinates] ?.recipe ?.name && <Typography align='center' variant='body1'>{<TurnedInIcon className={classes.tagIcon} color='secondary' />}{menu.content ?.[coordinates] ?.recipe ?.name}</Typography>}
                 {!menu.content ?.[coordinates] ?.recipe ?.name && <>
                     <Typography align='center' variant='body1'>{menu.content ?.[coordinates] ?.name}</Typography>
-                    {/* <div className={classes.ingredientContainer}>
-                        {getIngredientsList(coordinates, meal)}
-                    </div> */}
                     <div className={classes.chipContainer}>
                         {getIngredientsList(coordinates, meal)}
                     </div>
@@ -164,7 +163,7 @@ const MenuGrid = () => {
 
             const countLabel = ingredient.portionAmount ? ` ${Math.ceil(count / ingredient.portionAmount)}` : ` ${count}`
 
-            return <Chip className={classes.chip} label={`${countLabel}R de ${ingredient.name}`} color='secondary' />
+            return <Chip className={classes.chip} label={`${countLabel}R de ${ingredient.name}`} />
         })
 
     }
@@ -179,11 +178,15 @@ const MenuGrid = () => {
         </div>
 
         <div className={classes.legend}>
-            <Typography align='center' variant='h5' color='secondary'>Preparación semanal</Typography>
+            <Typography align='center' style={{ fontWeight: 600, marginBottom: '0.5em' }} variant='h5' color='secondary'>Preparación semanal</Typography>
+            <Typography align='center' variant='body1'>Una vez a la semana preparar las siguientes raciones de los siguientes alimentos, necesarios para seguir el menú:</Typography>
             <div className={classes.chipContainer}>
                 {getComplexIngredients()}
             </div>
         </div>
+        <Typography variant='h6'>Anna Escalada</Typography>
+        <Typography variant='overline'>Dietista Nutricionista</Typography>
+        <Typography variant='body1'>www.annaescalada.com - annaescalada@gmail.com</Typography>
     </div>
 
 }

@@ -141,12 +141,6 @@ const MenuForm = ({ menu, setMenu, handleClick, enums = [], error, allIngredient
             }
         })
 
-        // recipes.sort((a, b) => {
-        //     if(a.name < b.name) { return -1; }
-        //     if(a.name > b.name) { return 1; }
-        //     return 0;
-        // })
-
         setSelectedRecipes(_.uniqBy(recipes, e => e._id))
     }
 
@@ -173,14 +167,13 @@ const MenuForm = ({ menu, setMenu, handleClick, enums = [], error, allIngredient
         let complexIngredients = []
 
         const getComplex = (ingredients) => {
-            debugger
             if (!ingredients) return
             ingredients.forEach(ingredient => {
                 if (ingredient.isComplex) {
-                    if (!ingredient.portionAmount 
+                    if (!ingredient.portionAmount
                         || ingredient.portionAmount && !complexIngredients.find(_ingredient => _ingredient._id === ingredient._id)) {
-                            getComplex(ingredient.ingredients)
-                        } 
+                        getComplex(ingredient.ingredients)
+                    }
                     complexIngredients.push(ingredient)
                 }
             })
@@ -195,6 +188,50 @@ const MenuForm = ({ menu, setMenu, handleClick, enums = [], error, allIngredient
             const count = _.countBy(complexIngredients, (rec) => rec._id === ingredient._id).true
             const countLabel = ingredient.portionAmount ? ` ${count} / ${ingredient.portionAmount}` : ` ${count}`
             return <Chip className={classes.chip} label={`${ingredient.name}${countLabel}`} color='secondary' />
+        })
+
+    }
+
+    const getVeggies = () => {
+        if (!menu.content) return
+
+        const meals = Object.keys(menu.content)
+
+        if (!meals ?.length) return
+
+        let veggies = []
+
+        const getComplex = (ingredients) => {
+            if (!ingredients) return
+            ingredients.forEach(ingredient => {
+                if (ingredient.isComplex) {
+                    if (!ingredient.portionAmount
+                        || ingredient.portionAmount && !veggies.find(_ingredient => _ingredient._id === ingredient._id)) {
+                        getComplex(ingredient.ingredients)
+                    }
+                    veggies.push(ingredient)
+                }
+            })
+        }
+
+        meals.forEach(meal => {
+            menu.content[meal] ?.ingredients ?.forEach(ingredient => {
+                if (['hortalizas', 'crucíferas', 'otras verduras'].includes(ingredient.group)) {
+                    veggies.push(ingredient)
+                }
+            })
+
+            menu.content[meal] ?.recipe ?.ingredients ?.forEach(ingredient => {
+                console.log(ingredient.group)
+                if (['hortalizas', 'crucíferas', 'otras verduras'].includes(ingredient.group)) {
+                    veggies.push(ingredient)
+                }
+            })
+        })
+
+        return _.uniqBy(veggies, e => e._id).map(ingredient => {
+            const count = _.countBy(veggies, (rec) => rec._id === ingredient._id).true
+            return <Chip className={classes.chip} label={`${ingredient.name} ${count}`} color='primary' />
         })
 
     }
@@ -276,6 +313,7 @@ const MenuForm = ({ menu, setMenu, handleClick, enums = [], error, allIngredient
         />
         <div className={classes.chipContainer}>
             {getComplexIngredients()}
+            {getVeggies()}
         </div>
         <div className={classes.menuContainer}>
             {buildGrid()}

@@ -12,6 +12,7 @@ import { FeedbackContext } from '../../contexts/feedback';
 import Loading from '../../components/shared/Loading';
 import RecipeBookInput from '../../components/shared/RecipeBookInput';
 import { AuthContext } from '../../contexts/auth';
+import FileCopyIcon from '@material-ui/icons/FileCopy';
 
 const useStyles = makeStyles((theme) => ({
   search: {
@@ -139,6 +140,9 @@ const Ingredients = () => {
       {ingredient._id && <Fab className={classes.delete} color="secondary" onClick={handleDelete}>
         <DeleteIcon className={classes.deleteIcon} />
       </Fab>}
+      {ingredient._id && <Fab className={classes.delete} color="secondary" onClick={() => setIngredient(prev => ({ ...prev, _id: null }))}>
+                <FileCopyIcon className={classes.deleteIcon} />
+            </Fab>}
     </div>
     {isFormOpen && <IngredientsForm
       ingredient={ingredient}

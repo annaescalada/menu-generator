@@ -20,7 +20,7 @@ module.exports = {
     seasonEnum: ['verano', 'invierno', 'otoño', 'primavera'],
     portionEnum: ['tz', 'cs', 'cp', 'U', 'g'],
     //exclusive means that only one ingredient with the tag is needed to be tagged
-    exclusiveTags: ['pescado', 'carne', 'lácteo', 'huevo', 'gluten', 'semiprocesado', 'cocido', 'elaborado', 'genérico'],
+    exclusiveTags: ['pescado', 'carne', 'lácteo', 'huevo', 'gluten', 'semiprocesado', 'cocido', 'elaborado', 'genérico', 'crema'],
     //inclusive tag means that all ingredients must have the tag to be tagged
     inclusiveTags: ['crudo', 'eliminación'],
     utensilsEnum: ['olla pressión', 'trituradora', 'estuche de vapor', 'sartén', 'horno'],

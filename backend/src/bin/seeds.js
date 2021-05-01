@@ -373,7 +373,7 @@ const seeds = [
         name: 'Crema de coco',
         season: ['verano', 'primavera', 'otoño', 'invierno'],
         group: 'frutos secos y oleaginosos',
-        portion: 0.5,
+        portion: 0.25,
         unit: 'tz',
         tags: ['semiprocesado']
     },
