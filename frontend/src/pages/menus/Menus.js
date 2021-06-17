@@ -4,6 +4,7 @@ import AddIcon from '@material-ui/icons/Add'
 import Close from '@material-ui/icons/Close'
 import DeleteIcon from '@material-ui/icons/Delete'
 import _ from 'lodash'
+import FileCopyIcon from '@material-ui/icons/FileCopy';
 
 import sharedService from '../../services/shared';
 import AutocompleteInput from '../../components/shared/AutocompleteInput';
@@ -140,6 +141,9 @@ const Menus = () => {
             </Fab>
             {menu._id && <Fab className={classes.delete} color="secondary" onClick={handleDelete}>
                 <DeleteIcon className={classes.deleteIcon} />
+            </Fab>}
+            {menu._id && <Fab className={classes.delete} color="secondary" onClick={() => setMenu(prev => ({ ...prev, _id: null }))}>
+                <FileCopyIcon className={classes.deleteIcon} />
             </Fab>}
         </div>
         {isFormOpen && <MenuForm

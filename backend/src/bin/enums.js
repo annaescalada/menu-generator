@@ -83,7 +83,7 @@ module.exports = {
     },
     {
         icon: 'frutas',
-        key: 'fruits',
+        key: 'fruit',
         label: 'Frutas',
     },
     {

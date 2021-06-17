@@ -122,7 +122,7 @@ const Ingredients = () => {
     <div className={classes.search}>
       <AutocompleteInput
         label='Buscar ingrediente'
-        onChange={(v) => { setIngredient(v || {ingredientDefault}); setIsFormOpen(Boolean(v)) }}
+        onChange={(v) => { setIngredient(v || { ingredientDefault }); setIsFormOpen(Boolean(v)) }}
         getOptionLabel={option => `${option.name}`}
         options={allIngredients}
         variant='outlined'
@@ -141,8 +141,8 @@ const Ingredients = () => {
         <DeleteIcon className={classes.deleteIcon} />
       </Fab>}
       {ingredient._id && <Fab className={classes.delete} color="secondary" onClick={() => setIngredient(prev => ({ ...prev, _id: null }))}>
-                <FileCopyIcon className={classes.deleteIcon} />
-            </Fab>}
+        <FileCopyIcon className={classes.deleteIcon} />
+      </Fab>}
     </div>
     {isFormOpen && <IngredientsForm
       ingredient={ingredient}

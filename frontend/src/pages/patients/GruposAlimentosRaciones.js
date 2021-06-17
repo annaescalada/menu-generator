@@ -42,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
     },
     icon: {
         height: '2em',
+        // width: '1.5em',
         marginRight: '1em'
     },
     tagIcon: {
@@ -54,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'center'
     },
     group: {
-        minWidth:'23%',
+        minWidth: '23%',
         margin: '1em',
         padding: '1em',
         borderRadius: '15px',
@@ -114,47 +115,105 @@ const GruposAlimentosRaciones = (props) => {
             <Divider light='true' style={{ margin: '2em 0' }} />
 
             <div className={classes.groupContainer}>
+                <Grid container justify='center' alignItems='center' style={{ lineHeight: '2.5em' }}>
+                    {/* <Grid item align='center' xs={1}>
+                        <Typography variant='body1'>hi</Typography>
+                    </Grid> */}
+                    <Grid item align='center' xs={3}>
+                        <Typography variant='h6'>Grupo de alimentos</Typography>
+                    </Grid>
+                    <Grid item align='center' xs={4}>
+                        <Typography variant='h6'>Ingrediente</Typography>
+                    </Grid>
+                    <Grid item align='center' xs={2}>
+                        <Typography variant='h6'>Etiquetas</Typography>
+                    </Grid>
+                    <Grid item align='center' xs={1}>
+                        <Typography variant='h6'>Tamaño de la ración</Typography>
+                    </Grid>
+                    <Grid item align='center' xs={2}>
+                        <Typography variant='h6'>Temporada</Typography>
+                    </Grid>
+                </Grid>
                 {foodLabels && foodLabels.map(food => allIngredients
                     .filter(ingredient => ingredient.group === food.key)
-                    .length ? <div className={classes.group}>
-                        <div className={classes.titleContainer}>
-                            <img className={classes.icon} src={food.ref} alt="icon meal" />
-                            <Typography variant='h6'>{food.label}</Typography>
-                        </div>
-                        <div>
-                            {food.key === 'condimentos'
-                                ? <Typography style={{ lineHeight: '2em' }} variant='body1'>{allIngredients
-                                    .filter(ingredient => ingredient.group === food.key)
-                                    .map(ingredient => firstUppercase(ingredient.name))
-                                    .join(', ')
-                                }</Typography>
-                                : allIngredients
-                                    .filter(ingredient => ingredient.group === food.key)
-                                    .map(ingredient => <Grid container spacing={1} alignItems='center' style={{ lineHeight: '2em' }}>
-                                        <Grid item xs={4}>
-                                            <Typography variant='body1'>{firstUppercase(ingredient.name)}</Typography>
-                                        </Grid>
-                                        <Grid item xs={1}>
-                                            {ingredient.tags ?.includes('semiprocesado') && <ErrorIcon className={classes.tagIcon} color='secondary' />}
-                                            {ingredient.tags ?.includes('cocido') && <WatchLaterIcon className={classes.tagIcon} color='primary' />}
-                                        </Grid>
-                                        <Grid item xs={2}>
-                                            <Typography variant='body1'>{`${ingredient.portion} ${ingredient.unit}`}</Typography>
-                                        </Grid>
-                                        <Grid item xs={5}>
-                                            {ingredient.season ?.includes('verano') && <WbSunnyIcon className={classes.tagIcon} size='small' color='secondary' />}
-                                            {ingredient.season ?.includes('otoño') && <CloudIcon className={classes.tagIcon} size='small' color='secondary' />}
-                                            {ingredient.season ?.includes('invierno') && <AcUnitIcon className={classes.tagIcon} size='small' color='secondary' />}
-                                            {ingredient.season ?.includes('primavera') && <LocalFloristIcon className={classes.tagIcon} size='small' color='secondary' />}
-                                        </Grid>
-                                    </Grid>
-                                    )}
-                        </div>
-                    </div>
-                    : null)}
+                    .length ? allIngredients
+                        .filter(ingredient => ingredient.group === food.key)
+                        .map(ingredient => <Grid container justify='center' alignItems='center' style={{ lineHeight: '2.5em' }}>
+                            <Grid item align='center' xs={3}>
+                            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                <img className={classes.icon} src={food.ref} alt="icon meal" />
+                                <Typography variant='body1'>{food.label}</Typography>
+                            </div>
+                            </Grid>
+                            {/* <Grid item align='center' xs={2}>
+                            </Grid> */}
+                            <Grid item align='center' xs={4}>
+                                <Typography variant='body1'>{firstUppercase(ingredient.name)}</Typography>
+                            </Grid>
+                            <Grid item align='center' xs={2}>
+                                {ingredient.tags ?.includes('semiprocesado') && <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                    <ErrorIcon className={classes.tagIcon} color='secondary' />
+                                    <Typography style={{ marginRight: '2em' }} variant='subtitle2'>Semi-procesado</Typography>
+                                </div>}
+                                {ingredient.tags ?.includes('cocido') && <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                    <WatchLaterIcon className={classes.tagIcon} color='primary' />
+                                    <Typography style={{ marginRight: '2em' }} variant='subtitle2'>cocido</Typography>
+                                </div>}
+                            </Grid>
+                            <Grid item align='center' xs={1}>
+                                <Typography variant='body1'>{`${ingredient.portion} ${ingredient.unit}`}</Typography>
+                            </Grid>
+                            <Grid item align='center' xs={2}>
+                                {ingredient.season ?.includes('verano') && <WbSunnyIcon className={classes.tagIcon} size='small' color='secondary' />}
+                                {ingredient.season ?.includes('otoño') && <CloudIcon className={classes.tagIcon} size='small' color='secondary' />}
+                                {ingredient.season ?.includes('invierno') && <AcUnitIcon className={classes.tagIcon} size='small' color='secondary' />}
+                                {ingredient.season ?.includes('primavera') && <LocalFloristIcon className={classes.tagIcon} size='small' color='secondary' />}
+                            </Grid>
+                        </Grid>
+                        ) : null)}
+
+                {/* // {foodLabels && foodLabels.map(food => allIngredients
+                //     .filter(ingredient => ingredient.group === food.key)
+                //     .length ? <div className={classes.group}>
+                //         <div className={classes.titleContainer}>
+                //             <img className={classes.icon} src={food.ref} alt="icon meal" />
+                //             <Typography variant='h6'>{food.label}</Typography>
+                //         </div>
+                //         <div>
+                //             {food.key === 'condimentos'
+                //                 ? <Typography style={{ lineHeight: '2em' }} variant='body1'>{allIngredients
+                //                     .filter(ingredient => ingredient.group === food.key)
+                //                     .map(ingredient => firstUppercase(ingredient.name))
+                //                     .join(', ')
+                //                 }</Typography>
+                //                 : allIngredients
+                //                     .filter(ingredient => ingredient.group === food.key)
+                //                     .map(ingredient => <Grid container spacing={1} alignItems='center' style={{ lineHeight: '2em' }}>
+                //                         <Grid item xs={4}>
+                //                             <Typography variant='body1'>{firstUppercase(ingredient.name)}</Typography>
+                //                         </Grid>
+                //                         <Grid item xs={1}>
+                //                             {ingredient.tags ?.includes('semiprocesado') && <ErrorIcon className={classes.tagIcon} color='secondary' />}
+                //                             {ingredient.tags ?.includes('cocido') && <WatchLaterIcon className={classes.tagIcon} color='primary' />}
+                //                         </Grid>
+                //                         <Grid item xs={2}>
+                //                             <Typography variant='body1'>{`${ingredient.portion} ${ingredient.unit}`}</Typography>
+                //                         </Grid>
+                //                         <Grid item xs={5}>
+                //                             {ingredient.season ?.includes('verano') && <WbSunnyIcon className={classes.tagIcon} size='small' color='secondary' />}
+                //                             {ingredient.season ?.includes('otoño') && <CloudIcon className={classes.tagIcon} size='small' color='secondary' />}
+                //                             {ingredient.season ?.includes('invierno') && <AcUnitIcon className={classes.tagIcon} size='small' color='secondary' />}
+                //                             {ingredient.season ?.includes('primavera') && <LocalFloristIcon className={classes.tagIcon} size='small' color='secondary' />}
+                //                         </Grid>
+                //                     </Grid>
+                //                     )}
+                //         </div>
+                //     </div>
+                //     : null)} */}
             </div>
 
-            <Paper className={classes.legend}>
+            {/* <Paper className={classes.legend}>
                 {!patient.tags ?.includes('semiprocesado') && <ErrorIcon className={classes.tagIcon} color='secondary' />}
                 {!patient.tags ?.includes('semiprocesado') && <Typography style={{ marginRight: '2em' }} variant='subtitle2'>Semi-procesado</Typography>}
                 {!patient.tags ?.includes('cocido') && <WatchLaterIcon className={classes.tagIcon} color='primary' />}
@@ -167,7 +226,7 @@ const GruposAlimentosRaciones = (props) => {
                 <Typography style={{ marginRight: '2em' }} variant='subtitle2'>Invierno</Typography>
                 <LocalFloristIcon className={classes.tagIcon} size='small' color='secondary' />
                 <Typography style={{ marginRight: '2em' }} variant='subtitle2'>Primavera</Typography>
-            </Paper>
+            </Paper> */}
         </div>
     </>
 }
