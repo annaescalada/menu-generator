@@ -1,17 +1,14 @@
 const mongoose = require('mongoose');
-require('dotenv').config()
+require('dotenv').config({ path: '../../.env'})
 
 // setup mongoose
-mongoose.connect('mongodb://127.0.0.1:27017/menu-generator-api', {
+mongoose.connect(process.env.MONGODB_URI, {
     keepAlive: true,
     useNewUrlParser: true,
-    useCreateIndex: true
+    useCreateIndex: true,
+    useUnifiedTopology: true,
+    // reconnectTries: Number.MAX_VALUE
 })
-// mongoose.connect(process.env.MONGODB_URL, {
-//     keepAlive: true,
-//     useNewUrlParser: true,
-//     reconnectTries: Number.MAX_VALUE
-// });
 
 const Ingredient = require('../models/Ingredient.js')
 
@@ -438,7 +435,7 @@ const seeds = [
         tags: ['cocido'],
         isComplex: true,
         ingredients: ["607602bcd7c219f5deb4a5f7"],
-        utensils: [ "olla pressión" ],
+        utensils: ["olla pressión"],
         duration: 50,
         preparation: "Cocinar en la olla a presión con el doble de la cantidad en agua, durante 40 minutos a presión alta.",
         unit: "tz",
@@ -461,7 +458,7 @@ const seeds = [
         tags: ['cocido'],
         isComplex: true,
         ingredients: ["607602bcd7c219f5deb4a5f7"],
-        utensils: [ "olla pressión" ],
+        utensils: ["olla pressión"],
         duration: 15,
         preparation: "Cocinar en la olla a presión con el doble de la cantidad en agua, durante 5 minutos a presión alta.",
         unit: "tz",
@@ -492,7 +489,7 @@ const seeds = [
         tags: ['cocido'],
         isComplex: true,
         ingredients: ["607602bcd7c219f5deb4a5f7"],
-        utensils: [ "olla pressión" ],
+        utensils: ["olla pressión"],
         duration: 50,
         preparation: "Cocinar en la olla a presión con el doble de la cantidad en agua, durante 40 minutos a presión alta.",
         unit: "tz",
@@ -515,7 +512,7 @@ const seeds = [
         tags: ['cocido'],
         isComplex: true,
         ingredients: ["607602bcd7c219f5deb4a5f7"],
-        utensils: [ "olla pressión" ],
+        utensils: ["olla pressión"],
         duration: 50,
         preparation: "Cocinar en la olla a presión con el doble de la cantidad en agua, durante 40 minutos a presión alta.",
         unit: "tz",
@@ -568,7 +565,7 @@ const seeds = [
         tags: ['crudo']
     },
     {
-        name: "Arroz integral hervido",
+        name: "Arroz integral cocido",
         season: ['verano', 'primavera', 'otoño', 'invierno'],
         group: 'cereales',
         portion: 1.5,
@@ -576,7 +573,7 @@ const seeds = [
         tags: ['cocido', 'eliminación'],
         isComplex: true,
         ingredients: ["607602bcd7c219f5deb4a5f7"],
-        utensils: [ "olla pressión" ],
+        utensils: ["olla pressión"],
         duration: 30,
         preparation: "Cocinar en la olla a presión con el doble de la cantidad en agua, durante 20 minutos a presión alta.",
         unit: "tz",
@@ -599,7 +596,7 @@ const seeds = [
         tags: ['cocido', 'eliminación'],
         isComplex: true,
         ingredients: ["607602bcd7c219f5deb4a5f7"],
-        utensils: [ "olla pressión" ],
+        utensils: ["olla pressión"],
         duration: 15,
         preparation: "Cocinar en la olla a presión con el doble de la cantidad en agua, durante 5 minutos a presión alta.",
         unit: "tz",
@@ -614,7 +611,7 @@ const seeds = [
         tags: ['crudo']
     },
     {
-        name: "Trigo sarraceno hervido",
+        name: "Trigo sarraceno cocido",
         season: ['verano', 'primavera', 'otoño', 'invierno'],
         group: 'cereales',
         portion: 1.5,
@@ -622,7 +619,7 @@ const seeds = [
         tags: ['cocido', 'eliminación'],
         isComplex: true,
         ingredients: ["607602bcd7c219f5deb4a5f7"],
-        utensils: [ "olla pressión" ],
+        utensils: ["olla pressión"],
         duration: 30,
         preparation: "Cocinar en la olla a presión con el doble de la cantidad en agua, durante 20 minutos a presión alta.",
         unit: "tz",
@@ -1161,14 +1158,38 @@ const seeds = [
         portion: 0.5,
         unit: 'tz',
     },
+
 ]
 
-Ingredient.deleteMany({})
+const execSeeds = async () => {
+    for (let seed of seeds) {
+        let ingredient = await Ingredient.find({ name: seed.name })
+
+        ingredient = ingredient.length && ingredient[0]
+
+        if (ingredient) {
+            const updates = Object.keys(seed)
+
+            updates.forEach(update => ingredient[update] = seed[update])
+
+            console.log('updated ingredient==>', ingredient.name)
+
+            await ingredient.save()
+
+        }
+
+        if (!ingredient) {
+            await Ingredient.create(seed)
+
+            console.log('new ingredient==>', seed.name)
+        }
+    }
+}
+
+execSeeds()
     .then(() => {
-        Ingredient.create(seeds).then((ingredient) => {
-            console.log('seed ingredient==>', ingredient)
-            mongoose.connection.close()
-        }).catch((error) => {
-            console.log(error)
-        })
+        console.log('seeds done')
+        mongoose.connection.close()
+    }).catch(error => {
+        console.log(error)
     })

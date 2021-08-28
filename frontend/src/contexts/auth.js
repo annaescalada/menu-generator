@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import authService from '../services/auth';
 import Loading from '../components/shared/Loading';
-import { config } from '../pages/plans/planConfig'
+import { config } from '../modules/plans/planConfig'
 
 export const AuthContext = React.createContext();
 

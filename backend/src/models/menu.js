@@ -21,7 +21,6 @@ const contentKeys = () => {
     return keys
 }
 
-
 const menuSchema = new mongoose.Schema({
     name: {
         type: String,

@@ -2,25 +2,29 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
 import { ThemeProvider } from '@material-ui/core/styles'
+
 import App from './components/App'
+
 import AuthProvider from './contexts/auth'
-import Login from './pages/Login'
+import FeedbackProvider from './contexts/feedback'
+
+import theme from './styles/theme'
+
 import PublicRoute from './components/PublicRoute'
 import PrivateRoute from './components/PrivateRoute'
-import Ingredients from './pages/ingredients/Ingredients'
-import theme from './theme';
-import FeedbackProvider from './contexts/feedback';
-import Recipes from './pages/recipes/Recipes';
-import Menus from './pages/menus/Menus';
-import Patients from './pages/patients/Patients';
+import Login from './components/Login/Login'
+import Ingredients from './modules/ingredients/Ingredients'
+import Recipes from './modules/recipes/Recipes'
+import Menus from './modules/menus/Menus'
+import Patients from './modules/patients/Patients'
 
-import GruposAlimentosRaciones from './pages/patients/GruposAlimentosRaciones';
-import Plans from './pages/plans/Plans';
-import MenuBase from './pages/plans/MenuBase';
-import RecipeBook from './pages/recipes/RecipeBook';
-import MenuGrid from './pages/menus/MenuGrid';
-import ListaCompra from './pages/menus/ListaCompra';
-import MealPrep from './pages/menus/MealPrep';
+import GruposAlimentosRaciones from './modules/patients/GruposAlimentosRaciones'
+import Plans from './modules/plans/Plans'
+import MenuBase from './modules/plans/MenuBase'
+import RecipeBook from './modules/recipes/components/RecipeBook/RecipeBook'
+import MenuGrid from './modules/menus/components/MenuGrid'
+import ListaCompra from './modules/menus/components/ListaCompra'
+import MealPrep from './modules/menus/components/MealPrep'
 
 ReactDOM.render(
     <BrowserRouter>

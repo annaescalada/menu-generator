@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 
-export const FeedbackContext = React.createContext();
+export const FeedbackContext = React.createContext()
 
 const FeedbackProvider = ({ children }) => {
     const [message, setMessage] = useState()

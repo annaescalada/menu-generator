@@ -1,7 +1,7 @@
 const express= require('express')
 const cors = require("cors");
 require('./db/mongoose')
-require('dotenv').config()
+require('dotenv').config({ path: '../.env'})
 
 const userRouter = require('./controllers/user')
 const ingredientRouter = require('./controllers/ingredient')
@@ -12,7 +12,7 @@ const menuRouter = require('./controllers/menu')
 const sharedRouter = require('./controllers/shared')
 
 const app = express()
-const port = process.env.PORT || 5000
+const port = process.env.PORT
 
 app.use(express.json())
 
