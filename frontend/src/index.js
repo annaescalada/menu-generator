@@ -18,9 +18,9 @@ import Recipes from './modules/recipes/Recipes'
 import Menus from './modules/menus/Menus'
 import Patients from './modules/patients/Patients'
 
-import GruposAlimentosRaciones from './modules/patients/GruposAlimentosRaciones'
+import GruposAlimentosRaciones from './modules/patients/components/GruposAimentosRaciones/GruposAlimentosRaciones'
 import Plans from './modules/plans/Plans'
-import MenuBase from './modules/plans/MenuBase'
+import PlanBase from './modules/plans/components/PlanBase/PlanBase'
 import RecipeBook from './modules/recipes/components/RecipeBook/RecipeBook'
 import MenuGrid from './modules/menus/components/MenuGrid'
 import ListaCompra from './modules/menus/components/ListaCompra'
@@ -36,7 +36,7 @@ ReactDOM.render(
                         <PrivateRoute path='/grocery-list' component={ListaCompra} />
                         <PrivateRoute path='/menu-grid' component={MenuGrid} />
                         <PrivateRoute path='/recipe-book' component={RecipeBook} />
-                        <PrivateRoute path='/menu-base' component={MenuBase} />
+                        <PrivateRoute path='/menu-base' component={PlanBase} />
                         <PrivateRoute path='/grupos-alimentos-raciones' component={GruposAlimentosRaciones} />
                         <PrivateRoute path='/menus' component={Menus} />
                         <PrivateRoute path='/recipes' component={Recipes} />

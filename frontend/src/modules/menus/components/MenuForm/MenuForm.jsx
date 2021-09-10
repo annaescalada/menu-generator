@@ -13,7 +13,6 @@ import { useMenuChange } from './hooks';
 
 const MenuForm = ({ menu, setMenu, handleClick, enums = [], error, allIngredients, allRecipes, setSelectedRecipes }) => {
     const classes = useStyles()
-
     const [ingredientsOptions, recipesOptions] = useMenuChange(menu, allIngredients, allRecipes, setSelectedRecipes)
 
     return <Paper className={classes.container}>
@@ -58,8 +57,7 @@ const MenuForm = ({ menu, setMenu, handleClick, enums = [], error, allIngredient
             ingredientsOptions={ingredientsOptions}
             recipesOptions={recipesOptions}
         />
-        <Button 
-            className={classes.button} onClick={handleClick} color="secondary" variant="contained">Save</Button>
+        <Button className={classes.button} onClick={handleClick} color="secondary" variant="contained">Save</Button>
     </Paper>
 }
 

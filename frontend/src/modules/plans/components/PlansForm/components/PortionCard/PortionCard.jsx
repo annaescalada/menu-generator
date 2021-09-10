@@ -3,33 +3,14 @@ import { Grid, Paper, Button, Fab } from '@material-ui/core'
 import { Draggable } from 'react-beautiful-dnd'
 import DeleteIcon from '@material-ui/icons/Delete'
 import DragHandleIcon from '@material-ui/icons/DragHandle';
-import TextInput from '../../components/shared/TextInput';
-import { makeStyles } from '@material-ui/styles'
-import EditableInput from '../../components/shared/EditableInput';
+import TextInput from '../../../../../../components/shared/TextInput';
+import EditableInput from '../../../../../../components/shared/EditableInput';
+import { useStyles } from './styles';
 
-const useStyles = makeStyles((theme) => ({
-    container: {
-        margin: '1em',
-        padding: '1.5em',
-        backgroundColor: theme.palette.primary.extraMegaLight,
-        borderRadius: '20px',
-    },
-    icon: {
-        color: 'white'
-    },
-    img: {
-        height: '3em',
-        marginLeft: '1.5em'
-    },
-    lowOpacity: {
-        opacity: '20%'
-    }
-}))
-
-const PortionCard = ({ meal, setMeal, index, handleChange, handleDelete }) => {
+const PortionCard = ({ meal, setMeal, enums, index, handleChange, handleDelete }) => {
     const classes = useStyles()
 
-    console.log(meal)
+    const { keyIconLabel } = enums
 
     return <Draggable
         draggableId={meal._id}
@@ -50,17 +31,8 @@ const PortionCard = ({ meal, setMeal, index, handleChange, handleDelete }) => {
                         <DeleteIcon className={classes.icon} />
                     </Fab></Grid>
                 </Grid>
-                <Grid spacing={3} alignItems='center' justify='center' container>
-                    {[{ key: 'carbs', icon: 'cereales' },
-                    { key: 'proteins', icon: 'legumbres' },
-                    { key: 'cruciferous', icon: 'crucíferas' },
-                    { key: 'otherVeggies', icon: 'otras_verduras' },
-                    { key: 'greens', icon: 'hortalizas' },
-                    { key: 'fats', icon: 'frutos_secos_y_oleaginosos' },
-                    { key: 'omega3', icon: 'omega_3' },
-                    { key: 'fruit', icon: 'frutas' },
-                    { key: 'berries', icon: 'frutos_rojos' },
-                    { key: 'dairy', icon: 'lácteos' }].map(group => <Grid item xs={1}>
+                <Grid spacing={3} alignItems='center' justify='center' wrap='wrap' container>
+                    {keyIconLabel.map(group => <Grid wrap item xs={3}>
                         <TextInput className={(!meal[group.key] || meal[group.key] === '0') && classes.lowOpacity} type='number' label={<img className={classes.img} src={`/images/Food-icons/${group.icon}.png`} alt="icon meal" />} value={meal[group.key] || 0} onChange={(v) => handleChange(v, group.key, index)} />
                     </Grid>)}
                 </Grid>

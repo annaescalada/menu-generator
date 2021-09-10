@@ -44,11 +44,13 @@ const Menus = () => {
             setMenu={setMenu}
             handleClick={() => menu._id
                 ? handleEdit({ menu, setMenu, setIsFormOpen, setMessage, setSelectedRecipes, setReload })
-                : handleSave({ menu, setMenu, setIsFormOpen, setMessage, setSelectedRecipes, setReload })}            error={message}
+                : handleSave({ menu, setMenu, setIsFormOpen, setMessage, setSelectedRecipes, setReload })}            
+            error={message}
             enums={enums}
             allIngredients={allIngredients}
             allRecipes={allRecipes}
             setSelectedRecipes={setSelectedRecipes}
+            error={message}
         />}
     </>
 }

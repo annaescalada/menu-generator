@@ -7,7 +7,7 @@ import {
 
 
 const DateInput = ({ label, value, onChange, required, ...props }) => {
-    console.log(value)
+    // console.log(value)
     return <div style={{ width: 'auto', margin: '1em' }}>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <KeyboardDatePicker

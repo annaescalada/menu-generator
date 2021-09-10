@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { makeStyles, Typography, Paper, Grid } from '@material-ui/core';
-import { AuthContext } from '../../contexts/auth'
+import { AuthContext } from '../../../../contexts/auth'
 import ErrorIcon from '@material-ui/icons/Error';
 import moment from 'moment'
-import sharedService from '../../services/shared';
+import sharedService from '../../../../services/shared';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -75,7 +75,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-const MenuBase = () => {
+const PlanBase = () => {
     const classes = useStyles()
 
     const { selectedPlan: plan, selectedPatient: patient } = useContext(AuthContext)
@@ -150,4 +150,4 @@ const MenuBase = () => {
     </>
 }
 
-export default MenuBase
+export default PlanBase

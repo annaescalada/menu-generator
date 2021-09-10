@@ -28,7 +28,6 @@ const IngredientFilter = ({ recipe, setRecipe, enums, allIngredients }) => {
                 />
             </Button>
             {recipeStructure(recipe.meal).map(({ icon, options, required }) => {
-                console.log(icon, required)
                 const isActive = activeFilter === icon
                 return <>
                     <Button

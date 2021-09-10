@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { withRouter } from "react-router";
-import patientService from '../../services/patient';
 import { makeStyles, Paper, Typography, Grid, AppBar, Toolbar, Divider } from '@material-ui/core';
-import sharedService from '../../services/shared';
+import sharedService from '../../../../services/shared';
 import ErrorIcon from '@material-ui/icons/Error';
 import AcUnitIcon from '@material-ui/icons/AcUnit';
 import CloudIcon from '@material-ui/icons/Cloud';
@@ -11,7 +10,7 @@ import WatchLaterIcon from '@material-ui/icons/WatchLater';
 import LocalFloristIcon from '@material-ui/icons/LocalFlorist';
 import _ from 'lodash'
 import moment from 'moment'
-import { AuthContext } from '../../contexts/auth';
+import { AuthContext } from '../../../../contexts/auth';
 
 const useStyles = makeStyles((theme) => ({
     container: {

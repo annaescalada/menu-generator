@@ -1,4 +1,4 @@
-import { api } from './api'
+import { api } from "../../services/api";
 
 const patientService = {
   getAllPatients: () => api.get('/patients'),

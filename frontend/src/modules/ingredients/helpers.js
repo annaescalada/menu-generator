@@ -25,8 +25,9 @@ export const handleSave = async ({ ingredient, setIngredient, setIsFormOpen, set
   }
 }
 
-export const handleEdit = async ({ ingredient, setIngredient, setIsFormOpen, setMessage, setSelectedRecipes, setReload }) => async () => {
+export const handleEdit = async ({ ingredient, setIngredient, setIsFormOpen, setMessage, setSelectedRecipes, setReload }) => {
   try {
+    console.log(ingredient)
     await ingredientsService.edit(ingredient._id, ingredient)
     resetForm(setIngredient, setIsFormOpen, setReload, setSelectedRecipes)
 

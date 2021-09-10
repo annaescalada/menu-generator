@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import authService from '../services/auth';
 import Loading from '../components/shared/Loading';
-import { config } from '../modules/plans/planConfig'
+import { defaultPlan } from '../modules/plans/helpers';
 
 export const AuthContext = React.createContext();
 
@@ -15,7 +15,7 @@ const AuthProvider = ({ children }) => {
         phone: '',
         height: 0
     })
-    const [selectedPlan, setSelectedPlan] = useState({ distribution: config.defaultPlan })
+    const [selectedPlan, setSelectedPlan] = useState({ distribution: defaultPlan })
     const [selectedRecipes, setSelectedRecipes] = useState([])
     const [selectedMenu, setSelectedMenu] = useState({
         name: ''

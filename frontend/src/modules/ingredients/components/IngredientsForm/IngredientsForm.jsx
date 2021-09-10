@@ -11,6 +11,7 @@ import { handleIsComplex } from './helpers'
 
 const IngredientsForm = ({ ingredient, setIngredient, error, handleClick, allIngredients, enums }) => {
     const classes = useStyles()
+    console.log(handleClick)
 
     return <Paper className={classes.container}>
         <TextInput
