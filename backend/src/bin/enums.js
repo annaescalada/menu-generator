@@ -24,7 +24,7 @@ module.exports = {
     //inclusive tag means that all ingredients must have the tag to be tagged
     inclusiveTags: ['crudo', 'eliminación'],
     utensilsEnum: ['olla pressión', 'trituradora', 'estuche de vapor', 'sartén', 'horno'],
-    mealEnum: ['desayuno', 'comida', 'snack'],
+    mealEnum: ['desayuno', 'plato principal'],
     genderEnum: ['hombre', 'mujer'],
     daysEnum: ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo'],
     menuMealEnum: ['desayuno', 'comida', 'cena'],

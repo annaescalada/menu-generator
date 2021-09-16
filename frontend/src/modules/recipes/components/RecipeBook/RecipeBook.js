@@ -89,11 +89,11 @@ const RecipeBook = () => {
             <Grid container spacing={5}>
                 {selectedRecipes.map(recipe => <Grid item xs={4}>
                     <Card className={classes.root}>
-                        {/* {recipe.image && <CardMedia
+                        {recipe.image && <CardMedia
                             className={classes.media}
                             image={recipe.image}
                             title={recipe.name}
-                        />} */}
+                        />}
                         <CardContent className={[classes.content, recipe.isComplex && classes.isComplex].join(' ')}>
                             <Typography align='center' variant='h5'>{recipe.name}</Typography>
                             <div className={classes.chipContainer}>
