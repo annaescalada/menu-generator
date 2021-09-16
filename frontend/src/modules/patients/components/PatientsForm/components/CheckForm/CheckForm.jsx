@@ -21,7 +21,6 @@ const ChecksForm = ({ patient = {}, setPatient }) => {
     const [isFormOpen, setIsFormOpen] = useState(false)
     const [check, setCheck] = useState({})
 
-
     return <Accordion className={classes.expand}>
         <AccordionSummary
             className={classes.panel}
@@ -40,7 +39,7 @@ const ChecksForm = ({ patient = {}, setPatient }) => {
                 rows={rows(patient)}
                 values={values(
                     patient,
-                    <Fab size='small' color="secondary" onClick={() => handleDelete({ id: check._id, patient, setPatient, setMessage })}>
+                    (id) => <Fab size='small' color="secondary" onClick={() => handleDelete({ id, patient, setPatient, setMessage })}>
                         <DeleteIcon className={classes.deleteIcon} />
                     </Fab>)} />
             <Fab className={classes.add} size='medium' color="primary" aria-label="add" onClick={() => {
@@ -89,7 +88,7 @@ const ChecksForm = ({ patient = {}, setPatient }) => {
                         />
                     </Grid>
                 </Grid>
-                <Button className={classes.button} onClick={handleSave({ check, patient, setPatient, setIsFormOpen, setMessage })} color="secondary" variant="contained">Save</Button>
+                <Button className={classes.button} onClick={() => handleSave({ check, patient, setPatient, setIsFormOpen, setMessage })} color="secondary" variant="contained">Save</Button>
             </Paper>}
         </AccordionDetails>
 

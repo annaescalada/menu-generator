@@ -31,7 +31,8 @@ export const handleDelete = async ({ id, patient, setPatient, setMessage }) => {
     }
 }
 
-export const createData = (patient, id, date, weight, FA, PA, PC, deleteComponent) => {
+export const createData = ({ patient, id, date, weight, FA, PA, PC, deleteComponent }) => {
+    debugger
     const height = patient.height
     const IMC = (weight / ((height * height) / 10000)).toFixed(2)
 
@@ -55,13 +56,12 @@ export const createData = (patient, id, date, weight, FA, PA, PC, deleteComponen
         PC,
         ICC: (PA / PC).toFixed(2),
         fat: calculateFat(patient.gender),
-        delete: deleteComponent
+        delete: deleteComponent(id)
     };
 }
 
 export const values = (patient, deleteComponent) => patient.checks
-    ? patient.checks.map(check =>
-        createData(check._id, check.createdAt, check.weight, check.FA, check.PA, check.PC, deleteComponent))
+    ? patient.checks.map(check => createData({ patient, id: check._id, date: check.created_at, weight: check.weight, FA: check.FA, PA: check.PA, PC: check.PC, deleteComponent }))
     : []
 
 export const rows = patient => [
